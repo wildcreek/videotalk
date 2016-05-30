@@ -1,12 +1,12 @@
 package com.mateo.videotalk.controller;
 
-import com.mateo.videotalk.util.HttpRequestor;
 import com.mateo.videotalk.model.User;
 import com.mateo.videotalk.model.request.PhoneNumberParam;
 import com.mateo.videotalk.model.response.CheckTokenResult;
 import com.mateo.videotalk.model.response.LoginResult;
 import com.mateo.videotalk.model.response.PhoneNumberResult;
 import com.mateo.videotalk.service.UserService;
+import com.mateo.videotalk.util.HttpRequestor;
 import com.mateo.videotalk.util.JacksonUtil;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
@@ -15,15 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.mateo.videotalk.util.JacksonUtil.beanToJson;
-import static com.mateo.videotalk.util.JacksonUtil.jsonToBean;
 
 @Controller
 @RequestMapping("/account")

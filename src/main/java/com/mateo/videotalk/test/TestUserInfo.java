@@ -3,9 +3,10 @@ package com.mateo.videotalk.test;
 import com.squareup.okhttp.*;
 import com.squareup.okhttp.Request.Builder;
 
-import java.io.*;
-
-import static jdk.nashorn.internal.parser.TokenType.IF;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Administrator on 2016/5/28.
