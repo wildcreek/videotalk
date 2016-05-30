@@ -1,5 +1,6 @@
 package com.mateo.videotalk.test;
 
+import com.mateo.videotalk.Constant;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
@@ -19,7 +20,7 @@ public class TestUserAccount {
         OkHttpClient mOkHttpClient = new OkHttpClient();
         MediaType JSON1 = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON1, "{\"clientType\":\"0\",\"clientID\":\"1\",\"userAccount\":\"2\",\"loginType\":\"3\"}");
-        Request request = (new Builder()).url("http://192.168.1.105:8080/account/insert").post(body).build();
+        Request request = (new Builder()).url(Constant.USER_LOGIN_URL).post(body).build();
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new Callback() {
             public void onFailure(Request arg0, IOException arg1) {

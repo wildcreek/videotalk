@@ -1,7 +1,7 @@
 package com.mateo.videotalk.test;
 
+import com.mateo.videotalk.Constant;
 import com.squareup.okhttp.*;
-import com.squareup.okhttp.Request.Builder;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class TestUserLog {
         File file = new File("C:\\test.txt");
         builder.addFormDataPart("file", "test.txt",RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
-        Request request = new Request.Builder().url("http://192.168.1.105:8080/userlog/upload").post(requestBody)
+        Request request = new Request.Builder().url(Constant.UPLOAD_LOG_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 

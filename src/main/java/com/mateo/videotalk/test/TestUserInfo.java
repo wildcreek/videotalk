@@ -1,5 +1,6 @@
 package com.mateo.videotalk.test;
 
+import com.mateo.videotalk.Constant;
 import com.squareup.okhttp.*;
 import com.squareup.okhttp.Request.Builder;
 
@@ -27,16 +28,16 @@ public class TestUserInfo {
         File file = new File("C:\\test.txt");
         builder.addFormDataPart("file", "test.txt", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
-        Request request = new Builder().url("http://192.168.1.101:8080/userinfo/avatar/update").post(requestBody)
+        Request request = new Builder().url(Constant.CHANGE_AVATAR_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 
             public void onFailure(Request request, IOException e) {
-                System.out.print("上传头像失败:" + request.body().toString() + e.toString());
+                System.out.println("上传头像失败:" + request.body().toString() + e.toString());
             }
 
             public void onResponse(Response response) throws IOException {
-                System.out.print("上传头像成功:" + response.body().string());
+                System.out.println("上传头像成功:" + response.body().string());
             }
         });
     }
@@ -46,7 +47,7 @@ public class TestUserInfo {
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
         builder.addFormDataPart("userID", "testuserid");
         RequestBody requestBody = builder.build();
-        Request request = new Builder().url("http://192.168.1.101:8080/userinfo/avatar/find").post(requestBody)
+        Request request = new Builder().url(Constant.FIND_AVATAR_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 
@@ -75,7 +76,7 @@ public class TestUserInfo {
         byte[] buf = new byte[2048];
         int len = 0;
         FileOutputStream fos = null;
-        File avatarRoot = new File("C:\\zdownload");
+        File avatarRoot = new File("C:\\avatars");
         try {
             File file = new File(avatarRoot , fileName);
             fos = new FileOutputStream(file);
