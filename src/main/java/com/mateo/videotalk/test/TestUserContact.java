@@ -3,7 +3,6 @@ package com.mateo.videotalk.test;
 import com.mateo.videotalk.Constant;
 import com.squareup.okhttp.*;
 import com.squareup.okhttp.Request.Builder;
-
 import java.io.IOException;
 
 /**
