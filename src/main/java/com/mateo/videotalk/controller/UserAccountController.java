@@ -49,7 +49,7 @@ public class UserAccountController {
         String clientID = localUser.getClientID();
         if(localUser != null){//已经注册，返回相应参数
             Long userID = localUser.getUserID();
-            loginResponse.setUserID(localUser.getUserID() + "");
+            loginResponse.setUserID(userID + "");
             loginResponse.setFirstLogin("false");
             if (clientID.equals(localUser.getClientID())) {
                 loginResponse.setChangeDevice("false");
