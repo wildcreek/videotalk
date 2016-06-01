@@ -1,7 +1,7 @@
 ﻿ 
 DROP TABLE IF EXISTS `usercontact`;
 CREATE TABLE `usercontact` (
-  `contactId` int(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
+  `contactId` int(20) NOT NULL AUTO_INCREMENT,
   `userID` int(10) DEFAULT NULL,
   `contactName` varchar(50) DEFAULT NULL,
   `contactNumber` varchar(50) DEFAULT NULL,
@@ -34,10 +34,10 @@ DROP TABLE IF EXISTS `useraccount`;
 CREATE TABLE `useraccount` (
   `userAccount` varchar(50) NOT NULL,
   `userID` bigint(50) DEFAULT NULL,
-  `clientType` varchar(50) DEFAULT NULL,
+  `clientType` varchar(10) DEFAULT NULL,
   `clientID` varchar(50) DEFAULT NULL,
   `loginType` varchar(50) DEFAULT NULL,
   `phoneNumber` varchar(15) DEFAULT NULL,
-  `province` varchar(10) DEFAULT NULL,
+  `province` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`userAccount`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

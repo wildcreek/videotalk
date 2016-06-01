@@ -21,6 +21,7 @@
           <file>file://$MODULE_DIR$/src/main/resources/spring/spring-dao.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/spring/mvc-dispatcher-servlet.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring/spring-service.xml</file>
         </fileset>
       </configuration>
     </facet>

@@ -4,13 +4,43 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mateo.videotalk.dao.UserDao">
     <!--为DAO接口方法提供sq语句配置-->
-    <select id="findUserByUserAccount" >
+    <select id="getLatestUserIDByClientType" >
         SELECT
-          *
+        userID
+        FROM
+        useraccount
+        WHERE
+        clientType = #{clientType}
+        ORDER BY
+        userID
+        DESC
+        LIMIT
+        0,1
+    </select>
+    <select id="findUserByUserAccount" resultType="User">
+        SELECT
+          userAccount,clientType,clientID,loginType,phoneNumber,province
         FROM
           useraccount
         WHERE
           useracount = #{userAccount}
 
     </select>
+    <insert id="insertUser" >
+
+        INSERT INTO
+        useraccount (useraccount,clientType)
+        VALUES
+
+
+    </insert>
+    <update id="updateUser" >
+        SELECT
+        *
+        FROM
+        useraccount
+        WHERE
+        useracount = #{userAccount}
+
+    </update>
 </mapper>

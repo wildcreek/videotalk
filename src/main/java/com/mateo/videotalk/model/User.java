@@ -10,28 +10,35 @@ package com.mateo.videotalk.model;
  * @参数
  */
 public class User {
-
-    private String userAccount;
     /**
      * 客户端认证平台获取的唯一账号
      **/
-    private String clientType;
+    private String userAccount;
     /**
      * 终端设备类型
      **/
-    private String clientID;
+    private String clientType;
     /**
      * 登录的终端ID
      **/
-    private String loginType;
+    private String clientID;
     /**
      * 客户端登录认证方式
      **/
-    private Long userID;
-
+    private String loginType;
     /**
      * 平台自动生成的10位或11位数字，表示用户ID
      **/
+    private Long userID;
+    /**
+     * 手机号码
+     **/
+    private String phoneNumber;
+    /**
+     * 省份
+     **/
+    private String province;
+
     public String getClientType() {
         return clientType;
     }
@@ -72,6 +79,34 @@ public class User {
         this.userID = userID;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userAccount='" + userAccount + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", clientID='" + clientID + '\'' +
+                ", loginType='" + loginType + '\'' +
+                ", userID=" + userID +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", province='" + province + '\'' +
+                '}';
+    }
 }
 
 	

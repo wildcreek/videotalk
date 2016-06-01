@@ -47,7 +47,7 @@ public class UserAccountController {
         LoginResult loginResponse = new LoginResult();
         User localUser = userService.findUserByUserAccount(user.getUserAccount());
         String clientID = localUser.getClientID();
-        if(localUser != null){//已经注册，返回相应参数
+        if(localUser != null){//已经注册，将用户信息插入数据库，同时返回相应参数
             Long userID = localUser.getUserID();
             loginResponse.setUserID(userID + "");
             loginResponse.setFirstLogin("false");
@@ -57,7 +57,7 @@ public class UserAccountController {
                 loginResponse.setChangeDevice("true");
             }
         }else{//未注册
-            //TODO 生成userid，将相关数据插入数据库,此时userid为空
+            //TODO 生成userID，将相关数据插入数据库,此时userID为空
             loginResponse.setUserID("1000000001");
             loginResponse.setFirstLogin("true");
             loginResponse.setChangeDevice("false");
