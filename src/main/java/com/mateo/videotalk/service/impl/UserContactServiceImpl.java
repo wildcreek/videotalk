@@ -28,7 +28,7 @@ public class UserContactServiceImpl implements UserContactService {
         result.setContactId("1");
         result.setContactName("2");
         result.setContactNumber("3");
-        return result;
+        return contact;
     }
 
     public boolean deleteContact(String contactId, String userID) {

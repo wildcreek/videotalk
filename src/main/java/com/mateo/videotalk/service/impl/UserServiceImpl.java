@@ -5,34 +5,41 @@ import com.mateo.videotalk.model.User;
 import com.mateo.videotalk.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-@Service("userService")
+import static javafx.scene.input.KeyCode.R;
+
+//@Service("userService")
+@Service
 public class UserServiceImpl implements UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    @Resource
-    private UserDao userDao;
+    //@Autowired
+   // private UserDao userDao ;
     public User findUserByUserAccount(String userAccount){
         User user = new User();
-        user = userDao.findUserByUserAccount(userAccount);
+        user.setClientID("111");
+        user.setUserID(10001L);
+        user.setLoginType("1");
+       // user = userDao.findUserByUserAccount(userAccount);
         return user;
     }
     public boolean insertUser(User user){
+        String clientType = user.getClientType();
+       // long userID = userDao.getLatestUserIDByClientType(clientType) + 1;
         String userAccount = user.getUserAccount();
         String clientID = user.getClientID();
-        String clientType = user.getClientType();
         String loginType = user.getLoginType();
         String phoneNumber = user.getPhoneNumber();
         String province = user.getProvince();
-        long userID = user.getUserID();
-        userDao.insertUser(userAccount,clientType,clientID,loginType,phoneNumber,phoneNumber,province);
+        //userDao.insertUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province);
         return true;
     }
-    public boolean updateUser(User user){
-
+    public boolean updateUser(String clientID){
+        //userDao.updateUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province);
         return true;
     }
 

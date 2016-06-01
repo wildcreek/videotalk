@@ -11,6 +11,6 @@ public interface UserService {
 
     User findUserByUserAccount(String userAccount);
     boolean insertUser(User user);
-    boolean updateUser(User user);
+    boolean updateUser(String clientID);
 
 }

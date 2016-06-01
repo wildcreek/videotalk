@@ -29,16 +29,16 @@
     <insert id="insertUser" >
 
         INSERT INTO
-        useraccount (useraccount,clientType)
+        useraccount ( userID,userAccount,clientType,clientID,loginType,phoneNumber,province)
         VALUES
-
+         (#{userID},#{userAccount},#{clientType},#{clientID},#{loginType},#{phoneNumber},#{province})
 
     </insert>
     <update id="updateUser" >
-        SELECT
-        *
-        FROM
+        UPDATE
         useraccount
+        SET
+        clientID = #{clientID}
         WHERE
         useracount = #{userAccount}
 
