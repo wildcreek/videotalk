@@ -1,7 +1,7 @@
 ﻿ 
 DROP TABLE IF EXISTS `usercontact`;
 CREATE TABLE `usercontact` (
-  `contactId` int(20) NOT NULL DEFAULT '0' AUTO_INCREMENT,
+  `contactId` int(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
   `userID` int(10) DEFAULT NULL,
   `contactName` varchar(50) DEFAULT NULL,
   `contactNumber` varchar(50) DEFAULT NULL,
