@@ -12,35 +12,41 @@ import javax.annotation.Resource;
 
 import static javafx.scene.input.KeyCode.R;
 
-//@Service("userService")
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    //@Autowired
-   // private UserDao userDao ;
+    @Autowired
+    private UserDao userDao ;
     public User findUserByUserAccount(String userAccount){
         User user = new User();
         user.setClientID("111");
         user.setUserID(10001L);
         user.setLoginType("1");
-       // user = userDao.findUserByUserAccount(userAccount);
+        user = userDao.findUserByUserAccount(userAccount);
         return user;
     }
     public boolean insertUser(User user){
         String clientType = user.getClientType();
-       // long userID = userDao.getLatestUserIDByClientType(clientType) + 1;
+        long userID = userDao.getLatestUserIDByClientType(clientType) + 1;
         String userAccount = user.getUserAccount();
         String clientID = user.getClientID();
         String loginType = user.getLoginType();
         String phoneNumber = user.getPhoneNumber();
         String province = user.getProvince();
-        //userDao.insertUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province);
-        return true;
+
+        return userDao.insertUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province);
     }
-    public boolean updateUser(String clientID){
-        //userDao.updateUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province);
-        return true;
+
+    public boolean updateClientID(String userAccount, String clientID) {
+
+        return userDao.updateClientID(userAccount,clientID);
     }
+
+    public boolean updatePhoneNumberAndProvince(String userAccount, String phoneNumber, String province) {
+
+        return userDao.updatePhoneNumberAndProvince(userAccount,phoneNumber,province);
+    }
+
 
 }

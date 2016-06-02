@@ -13,7 +13,7 @@ public interface UserDao {
     User findUserByUserAccount(@Param("userAccount")String userAccount);
     boolean insertUser(@Param("userID")long userID ,@Param("userAccount")String userAccount,@Param("clientType")String clientType,@Param("clientID") String clientID,
                        @Param("loginType")String loginType,@Param("phoneNumber")String phoneNumber,@Param("province")String province);
-    boolean updateUser(@Param("userID")long userID ,@Param("userAccount")String userAccount,@Param("clientType")String clientType,@Param("clientID") String clientID,
-                       @Param("loginType")String loginType,@Param("phoneNumber")String phoneNumber,@Param("province")String province);
+    boolean updateClientID(@Param("userAccount")String userAccount,@Param("clientID") String clientID );
+    boolean updatePhoneNumberAndProvince(@Param("userAccount")String userAccount,@Param("phoneNumber")String phoneNumber,@Param("province")String province);
     long getLatestUserIDByClientType(String clientType);
 }

@@ -34,11 +34,20 @@
          (#{userID},#{userAccount},#{clientType},#{clientID},#{loginType},#{phoneNumber},#{province})
 
     </insert>
-    <update id="updateUser" >
+    <update id="updateClientID" >
         UPDATE
         useraccount
         SET
         clientID = #{clientID}
+        WHERE
+        useracount = #{userAccount}
+
+    </update>
+    <update id="updatePhoneNumberAndProvince" >
+        UPDATE
+        useraccount
+        SET
+        phoneNumber = #{phoneNumber},province = #{province}
         WHERE
         useracount = #{userAccount}
 

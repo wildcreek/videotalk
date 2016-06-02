@@ -66,7 +66,7 @@ public class UserAccountController {
             } else {
                 loginResponse.setChangeDevice("true");
             }
-            userService.updateUser(clientID);
+            userService.updateClientID(userAccount,clientID);
         }else{//未注册
             //TODO 生成userID，将相关数据插入数据库,此时userID为空
             resultUser.setPhoneNumber(localUser.getPhoneNumber());
