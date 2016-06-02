@@ -1,7 +1,6 @@
 package com.mateo.videotalk.controller;
 
 import com.mateo.videotalk.model.User;
-import com.mateo.videotalk.model.request.LoginParam;
 import com.mateo.videotalk.model.request.PhoneNumberParam;
 import com.mateo.videotalk.model.response.CheckTokenResult;
 import com.mateo.videotalk.model.response.LoginResult;
@@ -40,18 +39,21 @@ public class UserAccountController {
     }
 
     @RequestMapping(value = "/login", method=RequestMethod.POST)
-    public ResponseEntity<LoginResult> loginUser(@ModelAttribute User user) {
+    public ResponseEntity<LoginResult> loginUser(@RequestParam(value = "clientID", required = true) String clientID,
+                                                 @RequestParam(value = "clientType", required = true) String clientType,
+                                                 @RequestParam(value = "userAccount", required = true) String userAccount,
+                                                 @RequestParam(value = "loginType", required = true) String loginType) {
         log.debug("Info of loginParam(user):");
-        log.debug(ReflectionToStringBuilder.toString(user));
-        String clientID = user.getClientID();
-        String clientType = user.getClientType();
-        String userAccount = user.getUserAccount();
-        String loginType = user.getLoginType();
+//        log.debug(ReflectionToStringBuilder.toString(user));
+//        String clientID = user.getClientID();
+//        String clientType = user.getClientType();
+//        String userAccount = user.getUserAccount();
+//        String loginType = user.getLoginType();
         User resultUser = new User();
         resultUser.setClientID(clientID);
         resultUser.setClientType(clientType);
-        resultUser.setLoginType(userAccount);
-        resultUser.setUserAccount(loginType);
+        resultUser.setLoginType(loginType);
+        resultUser.setUserAccount(userAccount);
         //在此进行业务操作，比如数据库持久化
         //接收到注册请求,查询数据库，如已经注册，返回相应参数；未注册，则插入数据库并返回相应参数。
         LoginResult loginResponse = new LoginResult();
@@ -69,10 +71,13 @@ public class UserAccountController {
             userService.updateClientID(userAccount,clientID);
         }else{//未注册
             //TODO 生成userID，将相关数据插入数据库,此时userID为空
-            resultUser.setPhoneNumber(localUser.getPhoneNumber());
-            resultUser.setProvince(localUser.getProvince());
-            userService.insertUser(resultUser);
-            loginResponse.setUserID(userService.findUserByUserAccount(userAccount).getUserID()+"");
+            //resultUser.setPhoneNumber(localUser.getPhoneNumber());
+           // resultUser.setProvince(localUser.getProvince());
+            boolean isSuccess = userService.insertUser(resultUser);
+            if(isSuccess){
+                String userID = userService.findUserByUserAccount(userAccount).getUserID()+"";
+                loginResponse.setUserID(userID);
+            }
             loginResponse.setFirstLogin("true");
             loginResponse.setChangeDevice("false");
 

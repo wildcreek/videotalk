@@ -8,10 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-
-import static javafx.scene.input.KeyCode.R;
-
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
@@ -19,11 +15,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao ;
     public User findUserByUserAccount(String userAccount){
-        User user = new User();
-        user.setClientID("111");
-        user.setUserID(10001L);
-        user.setLoginType("1");
-        user = userDao.findUserByUserAccount(userAccount);
+        User user  = userDao.findUserByUserAccount(userAccount);
         return user;
     }
     public boolean insertUser(User user){
@@ -34,7 +26,6 @@ public class UserServiceImpl implements UserService {
         String loginType = user.getLoginType();
         String phoneNumber = user.getPhoneNumber();
         String province = user.getProvince();
-
         return userDao.insertUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province);
     }
 

@@ -3,7 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
     <!--配置整合mybatis过程-->
     <!--1.配置数据库相关参数-->
     <context:property-placeholder location="classpath:jdbc.properties"/>
@@ -12,8 +14,8 @@
           destroy-method="close">
         <property name="driverClassName" value="${driver}" />
         <property name="url" value="${url}" />
-        <property name="username" value="${username}" />
-        <property name="password" value="${password}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
         <!-- 初始化连接大小 -->
         <property name="initialSize" value="${initialSize}"></property>
         <!-- 连接池最大数量 -->
@@ -41,8 +43,9 @@
     <!--4.配置扫描dao接口包，动态实现dao接口，注入到spring容器中 -->
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
         <!--给出需要扫描dao接口包-->
         <property name="basePackage" value="com.mateo.videotalk.dao" />
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
+    <context:component-scan base-package="com.mateo.videotalk.dao"/>
 </beans>

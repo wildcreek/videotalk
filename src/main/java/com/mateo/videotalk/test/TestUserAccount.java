@@ -13,10 +13,10 @@ public class TestUserAccount {
     public static void main(String args[]) {
         OkHttpClient client = new OkHttpClient();
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
-        builder.addFormDataPart("clientID", "testClientID");
-        builder.addFormDataPart("clientType", "testClientType");
+        builder.addFormDataPart("clientID", "6666");
+        builder.addFormDataPart("clientType", "phone");
         builder.addFormDataPart("userAccount", "testUserAccount");
-        builder.addFormDataPart("loginType", "testLoginType");
+        builder.addFormDataPart("loginType", "1");
         RequestBody requestBody = builder.build();
         Request request = new Builder().url(Constant.USER_LOGIN_URL).post(requestBody)
                 .build();
