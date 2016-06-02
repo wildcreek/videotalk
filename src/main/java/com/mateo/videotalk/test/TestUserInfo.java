@@ -24,7 +24,7 @@ public class TestUserInfo {
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("multipart/form-data; charset=utf-8");
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
-        builder.addFormDataPart("userID", "testuserid");
+        builder.addFormDataPart("userID", "2000000001");
         File file = new File("C:\\test.txt");
         builder.addFormDataPart("file", "test.txt", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
@@ -45,7 +45,7 @@ public class TestUserInfo {
     public static void testGetAvatar() {
         OkHttpClient client = new OkHttpClient();
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
-        builder.addFormDataPart("userID", "testuserid");
+        builder.addFormDataPart("userID", "2000000002");
         RequestBody requestBody = builder.build();
         Request request = new Builder().url(Constant.FIND_AVATAR_URL).post(requestBody)
                 .build();

@@ -22,9 +22,7 @@ import java.util.Map;
 public class UserLogController {
 
     private static Logger log = LoggerFactory.getLogger(UserLogController.class);
-
     private UserLogService userLogService;
-
     @Autowired
     public void setUserLogService(UserLogService userLogService) {
         this.userLogService = userLogService;
@@ -45,10 +43,11 @@ public class UserLogController {
                     log.debug("In uploadLog, mFileName = {}", mFile.getOriginalFilename()  );
                     System.out.print("mFile:" + mFile.getOriginalFilename());
                     String fileName = mFile.getOriginalFilename() ;
-                    String path = "d:/" + fileName;
-                    File localFile = new File(path);
+                    String path = request.getSession().getServletContext().getRealPath("logs");
+                    File localFile = new File(path,fileName);
                     mFile.transferTo(localFile);
-                    request.setAttribute("fileUrl", path);
+                    userLogService.saveLog(userID , localFile.getAbsolutePath().replace("\\","\\\\"));
+                    //request.setAttribute("fileUrl", path);
                 }
             }
         }

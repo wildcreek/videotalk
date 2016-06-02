@@ -1,16 +1,8 @@
 package com.mateo.videotalk.controller;
 
-import com.mateo.videotalk.model.User;
-import com.mateo.videotalk.model.request.PhoneNumberParam;
-import com.mateo.videotalk.model.response.CheckTokenResult;
-import com.mateo.videotalk.model.response.LoginResult;
-import com.mateo.videotalk.model.response.PhoneNumberResult;
 import com.mateo.videotalk.service.UserInfoService;
-import com.mateo.videotalk.service.UserService;
 import com.mateo.videotalk.util.HttpRequestor;
-import com.mateo.videotalk.util.JacksonUtil;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +11,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static javafx.scene.input.KeyCode.F;
 
 @Controller
 @RequestMapping("/userinfo")
@@ -78,7 +69,7 @@ public class UserInfoController {
         //数据库查询
         String avatarPath = userInfoService.findAvatarByUserID(userID);
         //根据头像地址取出图片
-        File file = new File("C:\\avatar.jpg");
+        File file = new File(avatarPath);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", new String(file.getName().getBytes("utf-8"), "ISO8859-1"));
@@ -95,15 +86,18 @@ public class UserInfoController {
     public Map<String, String> updateAvatarByUserID(@RequestParam(value = "userID", required = true) String userID ,
                                                     @RequestParam(value = "file", required = true) MultipartFile file , HttpServletRequest request) throws IOException{
         //生成服务端文件保存地址
-        String path = request.getSession().getServletContext().getRealPath("upload");
+        String path = request.getSession().getServletContext().getRealPath("avatars");
         String fileName = file.getOriginalFilename();
         File targetFile = new File(path, fileName);
         System.out.println("服务端头像保存路径:" + targetFile.getAbsolutePath());
+        boolean isSuccess = false;
         if(!targetFile.exists()){
             targetFile.mkdirs();
         }
         try {
             file.transferTo(targetFile);
+            //在服务端保存文件地址时，分割符由\修正为\\
+            isSuccess = userInfoService.updateAvatarByUserID(userID,targetFile.getAbsolutePath().replace("\\","\\\\"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,6 +105,7 @@ public class UserInfoController {
         System.out.println("userID value: " + userID  );
         HashMap<String,String> result = new HashMap<String, String>();
         result.put("userID",userID);
+        result.put("isSuccess",isSuccess + "");
         return result;
     }
 
