@@ -35,7 +35,7 @@ public class UserContactServiceImpl implements UserContactService {
         return false;
     }
 
-    public List<Contact> findContacts(String userID) {
+    public List<Contact> findAllContacts(String userID) {
         List<Contact> result = new ArrayList<Contact>();
         Contact contact1 = new Contact();
         contact1.setContactId("1");

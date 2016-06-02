@@ -12,12 +12,16 @@ import java.io.IOException;
 public class TestUserLog {
 
     public static void main(String args[]) {
+        testSaveLog();
+    }
+
+    private static void testSaveLog() {
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("multipart/form-data; charset=utf-8");
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
         builder.addFormDataPart("userID", "testuserid");
         File file = new File("C:\\test.txt");
-        builder.addFormDataPart("file", "test.txt",RequestBody.create(mediaType, file));
+        builder.addFormDataPart("file", "test.txt", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
         Request request = new Request.Builder().url(Constant.UPLOAD_LOG_URL).post(requestBody)
                 .build();

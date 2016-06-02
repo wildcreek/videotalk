@@ -11,6 +11,10 @@ import java.io.IOException;
 public class TestUserAccount {
 
     public static void main(String args[]) {
+        testLogin();
+    }
+
+    private static void testLogin() {
         OkHttpClient client = new OkHttpClient();
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
         builder.addFormDataPart("clientID", "6666");

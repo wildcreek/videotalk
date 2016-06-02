@@ -46,6 +46,6 @@ public interface UserContactService {
      * @param userID
      * @return
      */
-    List<Contact> findContacts(String userID);
+    List<Contact> findAllContacts(String userID);
 
 }
