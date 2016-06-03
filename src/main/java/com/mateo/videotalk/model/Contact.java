@@ -1,25 +1,25 @@
 package com.mateo.videotalk.model;
 
 public class Contact {
-    private String contactId;
-    private String userID;
+    private int contactId;
+    private int userID;
     private String contactName;
     private String contactNumber;
     private String contactAvatar;
 
-    public String getContactId() {
+    public int getContactId() {
         return contactId;
     }
 
-    public void setContactId(String contactId) {
+    public void setContactId(int contactId) {
         this.contactId = contactId;
     }
 
-    public String getUserID() {
+    public int getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(int userID) {
         this.userID = userID;
     }
 
@@ -45,6 +45,17 @@ public class Contact {
 
     public void setContactAvatar(String contactAvatar) {
         this.contactAvatar = contactAvatar;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "contactId=" + contactId +
+                ", userID=" + userID +
+                ", contactName='" + contactName + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", contactAvatar='" + contactAvatar + '\'' +
+                '}';
     }
 }
 

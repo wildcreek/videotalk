@@ -177,4 +177,11 @@ public class CheckTokenResult {
 
     }
 
+    @Override
+    public String toString() {
+        return "CheckTokenResult{" +
+                "header=" + header +
+                ", body=" + body +
+                '}';
+    }
 }

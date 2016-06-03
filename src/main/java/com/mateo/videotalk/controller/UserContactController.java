@@ -27,6 +27,17 @@ public class UserContactController {
         this.userContactService = userContactService;
     }
 
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Contact> createContact(@ModelAttribute Contact contact) {
+        log.debug("Info of contact:");
+        log.debug(ReflectionToStringBuilder.toString(contact));
+        //插入数据库并返回相应参数。
+        Contact resultContact = userContactService.createContact(contact);
+
+        return new ResponseEntity<Contact>(resultContact, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Contact> updateContact(@ModelAttribute Contact contact) {
@@ -41,27 +52,27 @@ public class UserContactController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, String> deleteContact(@RequestParam(value = "contactId", required = true) String contactId,
-                                             @RequestParam(value = "userID", required = true) String userID) {
+    public Map<String, String> deleteContact(@RequestParam(value = "contactId", required = true) int contactId,
+                                             @RequestParam(value = "userID", required = true) int userID) {
         System.out.println("contactId value: " + contactId + "userID vaule: " + userID);
         //数据库插入
-        boolean isSuccess = userContactService.deleteContact(contactId, userID);
-        if (isSuccess) {
-
-        } else {
-
-        }
+        boolean isSuccess = userContactService.deleteContact(Integer.valueOf(contactId), Integer.valueOf(userID));
         HashMap<String, String> result = new HashMap<String, String>();
-        result.put("userID", userID);
+        result.put("userID", userID + "");
+        if (isSuccess) {
+            result.put("isSuccess", "true");
+        } else {
+            result.put("isSuccess", "false");
+        }
         return result;
 
     }
 
     @RequestMapping(value = "/find_all", method = RequestMethod.POST)
-    public ResponseEntity<List<Contact>> findAvatarByUserID(@RequestParam(value = "userID", required = true) String userID) {
+    public ResponseEntity<List<Contact>> findAvatarByUserID(@RequestParam(value = "userID", required = true) int userID) {
         System.out.println("userID value: " + userID);
         //数据库查询
-        List<Contact> contacts = userContactService.findContacts(userID);
+        List<Contact> contacts = userContactService.findAllContacts(userID);
         return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
     }
 

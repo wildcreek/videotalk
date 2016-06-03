@@ -58,4 +58,16 @@ public class PhoneNumberParam {
     public void setMsgid(String msgid) {
         this.msgid = msgid;
     }
+
+    @Override
+    public String toString() {
+        return "PhoneNumberParam{" +
+                "version='" + version + '\'' +
+                ", userID='" + userID + '\'' +
+                ", msgid='" + msgid + '\'' +
+                ", sourceid='" + sourceid + '\'' +
+                ", appid='" + appid + '\'' +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }

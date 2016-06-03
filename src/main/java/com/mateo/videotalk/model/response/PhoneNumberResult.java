@@ -8,7 +8,6 @@ public class PhoneNumberResult {
     private String resultcode;
     private String msisdn;
     private String msisdntype;
-    private String number;
     private String province;
 
     public String getMsisdntype() {
@@ -35,14 +34,6 @@ public class PhoneNumberResult {
         this.resultcode = resultcode;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public String getMsisdn() {
         return msisdn;
     }
@@ -57,5 +48,16 @@ public class PhoneNumberResult {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    @Override
+    public String toString() {
+        return "PhoneNumberResult{" +
+                "inresponseto='" + inresponseto + '\'' +
+                ", resultcode='" + resultcode + '\'' +
+                ", msisdn='" + msisdn + '\'' +
+                ", msisdntype='" + msisdntype + '\'' +
+                ", province='" + province + '\'' +
+                '}';
     }
 }

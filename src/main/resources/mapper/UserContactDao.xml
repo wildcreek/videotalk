@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mateo.videotalk.dao.UserContactDao">
+    <!--为DAO接口方法提供sql语句配置-->
+    <select id="findContact" resultType="Contact" parameterType="int">
+        SELECT
+        contactId,userID,contactName,contactNumber,contactAvatar
+        FROM
+        usercontact
+        WHERE
+        contactId = #{contactId} AND userID = #{userID}
+    </select>
+    <insert id="insertContact" parameterType="Contact" >
+        <selectKey resultType="int" order="AFTER" keyProperty="contactId">
+            SELECT LAST_INSERT_ID() AS contactId
+        </selectKey>
+        INSERT INTO
+        usercontact (userID,contactName,contactNumber,contactAvatar)
+        VALUES
+        (#{userID},#{contactName},#{contactNumber},#{contactAvatar})
+    </insert>
+    <update id="updateContact" >
+        UPDATE
+        usercontact
+        SET
+        contactName = #{contactName},contactNumber = #{contactNumber},contactAvatar = #{contactAvatar}
+        WHERE
+        contactId = #{contactId} AND userID = #{userID}
+    </update>
+    <delete id="deleteContact" >
+        DELETE FROM
+        usercontact
+        WHERE
+        contactId = #{contactId} AND userID = #{userID}
+
+    </delete>
+    <select id="findAllContacts" resultType="Contact">
+        SELECT
+        contactId,userID,contactName,contactNumber,contactAvatar
+        FROM
+        usercontact
+        WHERE
+        userID = #{userID}
+    </select>
+</mapper>

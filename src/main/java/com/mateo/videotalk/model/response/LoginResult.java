@@ -31,4 +31,13 @@ public class LoginResult {
     public void setChangeDevice(String changeDevice) {
         this.changeDevice = changeDevice;
     }
+
+    @Override
+    public String toString() {
+        return "LoginResult{" +
+                "userID='" + userID + '\'' +
+                ", firstLogin='" + firstLogin + '\'' +
+                ", changeDevice='" + changeDevice + '\'' +
+                '}';
+    }
 }
