@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,17 +35,18 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<LoginResult> loginUser(@RequestParam(value = "clientID", required = true) String clientID,
-                                                 @RequestParam(value = "clientType", required = true) String clientType,
-                                                 @RequestParam(value = "userAccount", required = true) String userAccount,
-                                                 @RequestParam(value = "loginType", required = true) String loginType) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public ResponseEntity<LoginResult> loginUser(@RequestBody User user) {
+//        @RequestParam(value = "clientID", required = true) String clientID,
+//        @RequestParam(value = "clientType", required = true) String clientType,
+//        @RequestParam(value = "userAccount", required = true) String userAccount,
+//        @RequestParam(value = "loginType", required = true) String loginType
         log.debug("Info of loginParam(user):");
-//        log.debug(ReflectionToStringBuilder.toString(user));
-//        String clientID = user.getClientID();
-//        String clientType = user.getClientType();
-//        String userAccount = user.getUserAccount();
-//        String loginType = user.getLoginType();
+        log.debug(ReflectionToStringBuilder.toString(user));
+        String clientID = user.getClientID();
+        String clientType = user.getClientType();
+        String userAccount = user.getUserAccount();
+        String loginType = user.getLoginType();
         User resultUser = new User();
         resultUser.setClientID(clientID);
         resultUser.setClientType(clientType);
@@ -86,7 +84,7 @@ public class UserAccountController {
     }
 
     @RequestMapping(value = "/getNumber", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public ResponseEntity<PhoneNumberResult> getPhoneNumber(@ModelAttribute PhoneNumberParam params) {
+    public ResponseEntity<PhoneNumberResult> getPhoneNumber(@RequestBody PhoneNumberParam params) {
         log.debug("Info of PhoneNumberParam:");
         log.debug(ReflectionToStringBuilder.toString(params));
         //重新封装参数，向认证平台请求校验token，获取手机号和省份等信息
@@ -105,7 +103,7 @@ public class UserAccountController {
         header.put("msgid", params.getMsgid());
         header.put("systemtime", systemtime);
         header.put("sourceid", params.getSourceid());
-        header.put("apptype", "phone");//TODO
+        header.put("apptype", "5");//5 代表手机客户端
         header.put("appid", params.getAppid());
         body.put("token", params.getToken());
         requestParam.put("header", header);

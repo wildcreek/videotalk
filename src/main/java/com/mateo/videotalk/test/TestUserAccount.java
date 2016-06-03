@@ -1,8 +1,10 @@
 package com.mateo.videotalk.test;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mateo.videotalk.Constant;
 import com.squareup.okhttp.*;
 import com.squareup.okhttp.Request.Builder;
+
 import java.io.IOException;
 
 /**
@@ -15,13 +17,23 @@ public class TestUserAccount {
     }
 
     private static void testLogin() {
+//        OkHttpClient client = new OkHttpClient();
+//        MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
+//        builder.addFormDataPart("clientID", "6666");
+//        builder.addFormDataPart("clientType", "phone");
+//        builder.addFormDataPart("userAccount", "testUserAccount");
+//        builder.addFormDataPart("loginType", "1");
+//        RequestBody requestBody = builder.build();
+
         OkHttpClient client = new OkHttpClient();
-        MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
-        builder.addFormDataPart("clientID", "6666");
-        builder.addFormDataPart("clientType", "phone");
-        builder.addFormDataPart("userAccount", "testUserAccount");
-        builder.addFormDataPart("loginType", "1");
-        RequestBody requestBody = builder.build();
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+        JSONObject params = new JSONObject();
+        params.put("userAccount", "test");
+        params.put("clientType", "phone");
+        params.put("clientID", "8888");
+        params.put("loginType", "3");
+        RequestBody requestBody = RequestBody.create(mediaType, params.toJSONString());
+        System.out.println("请求参数:" + params.toJSONString() + "::" + params.toString());
         Request request = new Builder().url(Constant.USER_LOGIN_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
