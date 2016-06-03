@@ -15,7 +15,6 @@ public class TestUserContact {
         testUpdateContact();
         testDeleteContact();
         testFindAllContacts();
-
     }
 
     public static void testCreateContact() {
@@ -26,7 +25,7 @@ public class TestUserContact {
         builder.addFormDataPart("contactNumber", "okhttpCreatedContactNumber");
         builder.addFormDataPart("contactAvatar", "okhttpCreatedContactAvatar");
         RequestBody requestBody = builder.build();
-        Request request = new Builder().url(Constant.CREATE__USER_CONTACT_URL).post(requestBody)
+        Request request = new Builder().url(Constant.CREATE_USER_CONTACT_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 

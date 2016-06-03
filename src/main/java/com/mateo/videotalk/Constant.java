@@ -12,7 +12,7 @@ public class Constant {
     public static final String CHANGE_NICKNAME_URL     = "http://192.168.1.113:8080/userinfo/nickname/update";
     public static final String FIND_AVATAR_URL         = "http://192.168.1.113:8080/userinfo/avatar/find";
     public static final String CHANGE_AVATAR_URL       = "http://192.168.1.113:8080/userinfo/avatar/update";
-    public static final String CREATE__USER_CONTACT_URL = "http://192.168.1.113:8080/usercontact/create";
+    public static final String CREATE_USER_CONTACT_URL = "http://192.168.1.113:8080/usercontact/create";
     public static final String UPDATE_USER_CONTACT_URL = "http://192.168.1.113:8080/usercontact/update";
     public static final String DELETE_USER_CONTACT_URL = "http://192.168.1.113:8080/usercontact/delete";
     public static final String FIND_ALL_CONTACT_URL    = "http://192.168.1.113:8080/usercontact/find_all";

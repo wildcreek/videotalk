@@ -21,22 +21,22 @@
           userID = #{userID}
 
     </select>
-    <update id="updateAvatarByUserID" >
+    <insert id="updateAvatarByUserID" >
+        INSERT INTO
+        userinfo (userID,avatar)
+        VALUES
+        (#{userID},#{avatar})
+        ON DUPLICATE KEY
         UPDATE
-        userinfo
-        SET
         avatar = #{avatar}
-        WHERE
-        userID = #{userID}
-
-    </update>
-    <update id="updateNickNameByUserID" >
+    </insert>
+    <insert id="updateNickNameByUserID" >
+        INSERT INTO
+        userinfo (userID,nickName)
+        VALUES
+        (#{userID},#{nickName})
+        ON DUPLICATE KEY
         UPDATE
-        userinfo
-        SET
         nickName = #{nickName}
-        WHERE
-        userID = #{userID}
-
-    </update>
+    </insert>
 </mapper>

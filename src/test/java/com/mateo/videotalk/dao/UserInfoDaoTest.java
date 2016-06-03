@@ -31,16 +31,16 @@ public class UserInfoDaoTest {
 
     @Test
     public void updateAvatarByUserID() throws Exception {
-        String userID = "2000000001";
-        String avatar = "C:\\avatars\\avatar3.jpg";
+        String userID = "2000000005";
+        String avatar = "C:\\\\avatars\\\\avatar3.jpg";
         boolean isSuccess = userInfoDao.updateAvatarByUserID(userID,avatar);
         System.out.println(isSuccess);
     }
 
     @Test
     public void updateNickNameByUserID() throws Exception {
-        String userID = "2000000001";
-        String nickName = "wangwu";
+        String userID = "2000000005";
+        String nickName = "zhaoliu";
         boolean isSuccess = userInfoDao.updateNickNameByUserID(userID,nickName);
         System.out.println(isSuccess);
     }
