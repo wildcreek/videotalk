@@ -29,7 +29,7 @@ public class UserContactController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Contact> createContact(@ModelAttribute Contact contact) {
+    public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         log.debug("Info of contact:");
         log.debug(ReflectionToStringBuilder.toString(contact));
         //插入数据库并返回相应参数。
@@ -40,7 +40,7 @@ public class UserContactController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Contact> updateContact(@ModelAttribute Contact contact) {
+    public ResponseEntity<Contact> updateContact(@RequestBody Contact contact) {
         log.debug("Info of contact:");
         log.debug(ReflectionToStringBuilder.toString(contact));
         //接收到更新用户联系人请求。如联系人已经存在，则更新；不存在，则插入数据库并返回相应参数。
