@@ -28,11 +28,11 @@ public class TestUserLog {
         client.newCall(request).enqueue(new Callback() {
 
             public void onFailure(Request request, IOException e) {
-                System.out.print("失败" + request.body().toString() + e.toString());
+                System.out.print("日志上传失败" + request.body().toString() + e.toString());
             }
 
             public void onResponse(Response response) throws IOException {
-                System.out.print("成功" + response.body().string());
+                System.out.print("日志上传成功" + response.body().string());
             }
         });
     }

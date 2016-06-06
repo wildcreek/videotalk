@@ -33,16 +33,16 @@ public class TestUserAccount {
         params.put("clientID", "8888");
         params.put("loginType", "3");
         RequestBody requestBody = RequestBody.create(mediaType, params.toJSONString());
-        System.out.println("请求参数:" + params.toJSONString() + "::" + params.toString());
+        System.out.println("登录请求参数:" + params.toJSONString());
         Request request = new Builder().url(Constant.USER_LOGIN_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             public void onFailure(Request arg0, IOException arg1) {
-                System.out.print("失败" + arg0.body().toString() + arg1.toString());
+                System.out.print("登录失败" + arg0.body().toString() + arg1.toString());
             }
 
             public void onResponse(Response arg0) throws IOException {
-                System.out.print("成功" + arg0.body().string());
+                System.out.print("登录成功" + arg0.body().string());
             }
         });
     }

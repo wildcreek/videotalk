@@ -1,6 +1,8 @@
 package com.mateo.videotalk.controller;
 
 import com.mateo.videotalk.model.Contact;
+import com.mateo.videotalk.model.request.DeleteContactParam;
+import com.mateo.videotalk.model.request.FindContactsParam;
 import com.mateo.videotalk.model.response.BaseResponse;
 import com.mateo.videotalk.model.response.ContactResponse;
 import com.mateo.videotalk.model.response.FindAllContactResponse;
@@ -11,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -110,9 +109,10 @@ public class UserContactController {
         return new ResponseEntity<BaseResponse>(baseResponse, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResponseEntity<BaseResponse> deleteContact(@RequestParam(value = "contactId", required = true) int contactId,
-                                             @RequestParam(value = "userID", required = true) int userID) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public ResponseEntity<BaseResponse> deleteContact(@RequestBody DeleteContactParam param) {
+        String contactId = param.getContactId();
+        String userID  = param.getUserID();
         System.out.println("contactId value: " + contactId + "userID vaule: " + userID);
         BaseResponse baseResponse ;
         //数据库插入
@@ -126,8 +126,9 @@ public class UserContactController {
 
     }
 
-    @RequestMapping(value = "/find_all", method = RequestMethod.POST)
-    public ResponseEntity<FindAllContactResponse> findAvatarByUserID(@RequestParam(value = "userID", required = true) int userID) {
+    @RequestMapping(value = "/find_all", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public ResponseEntity<FindAllContactResponse> findAllContactsByUserID(@RequestBody FindContactsParam param) {
+        int userID = Integer.valueOf(param.getUserID());
         System.out.println("userID value: " + userID);
         FindAllContactResponse response = new FindAllContactResponse();
         //数据库查询
