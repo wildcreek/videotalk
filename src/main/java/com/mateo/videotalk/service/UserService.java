@@ -12,6 +12,6 @@ public interface UserService {
     User findUserByUserAccount(String userAccount);
     boolean insertUser(User user);
     boolean updateClientID(String userAccount,String clientID);
-    boolean updatePhoneNumberAndProvince(String userAccount,String phoneNumber,String province);
+    boolean updatePhoneNumberAndProvince(String userID,String phoneNumber,String province);
 
 }

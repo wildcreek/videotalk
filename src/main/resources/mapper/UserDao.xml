@@ -49,7 +49,7 @@
         SET
         phoneNumber = #{phoneNumber},province = #{province}
         WHERE
-        userAccount = #{userAccount}
+        userID = #{userID}
 
     </update>
 </mapper>

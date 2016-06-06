@@ -3,8 +3,8 @@ package com.mateo.videotalk.controller;
 import com.mateo.videotalk.model.User;
 import com.mateo.videotalk.model.request.PhoneNumberParam;
 import com.mateo.videotalk.model.response.CheckTokenResult;
-import com.mateo.videotalk.model.response.LoginResult;
-import com.mateo.videotalk.model.response.PhoneNumberResult;
+import com.mateo.videotalk.model.response.LoginResponse;
+import com.mateo.videotalk.model.response.PhoneNumberResponse;
 import com.mateo.videotalk.service.UserService;
 import com.mateo.videotalk.util.HttpRequestor;
 import com.mateo.videotalk.util.JacksonUtil;
@@ -15,8 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class UserAccountController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public ResponseEntity<LoginResult> loginUser(@RequestBody User user) {
+    public ResponseEntity<LoginResponse> loginUser(@RequestBody User user) {
 //        @RequestParam(value = "clientID", required = true) String clientID,
 //        @RequestParam(value = "clientType", required = true) String clientType,
 //        @RequestParam(value = "userAccount", required = true) String userAccount,
@@ -54,17 +55,18 @@ public class UserAccountController {
         resultUser.setUserAccount(userAccount);
         //在此进行业务操作，比如数据库持久化
         //接收到注册请求,查询数据库，如已经注册，返回相应参数；未注册，则插入数据库并返回相应参数。
-        LoginResult loginResponse = new LoginResult();
+        LoginResponse loginResponse = new LoginResponse();
+        LoginResponse.LoginResult loginResult = loginResponse.new LoginResult();
         User localUser = userService.findUserByUserAccount(userAccount);
         if (localUser != null) {//已经注册，返回相应参数,同时将用户信息插入数据库
             Long userID = localUser.getUserID();
             String localClientID = localUser.getClientID();
-            loginResponse.setUserID(userID + "");
-            loginResponse.setFirstLogin("false");
+            loginResult.setUserID(userID + "");
+            loginResult.setFirstLogin("false");
             if (clientID.equals(localClientID)) {
-                loginResponse.setChangeDevice("false");
+                loginResult.setChangeDevice("false");
             } else {
-                loginResponse.setChangeDevice("true");
+                loginResult.setChangeDevice("true");
             }
             userService.updateClientID(userAccount, clientID);
         } else {//未注册
@@ -74,26 +76,31 @@ public class UserAccountController {
             boolean isSuccess = userService.insertUser(resultUser);
             if (isSuccess) {
                 String userID = userService.findUserByUserAccount(userAccount).getUserID() + "";
-                loginResponse.setUserID(userID);
+                loginResult.setUserID(userID);
             }
-            loginResponse.setFirstLogin("true");
-            loginResponse.setChangeDevice("false");
+            loginResult.setFirstLogin("true");
+            loginResult.setChangeDevice("false");
 
         }
-        return new ResponseEntity<LoginResult>(loginResponse, HttpStatus.OK);
+        loginResponse.setStatus("success");
+        loginResponse.setErrorCode("");
+        loginResponse.setErrorMsg("");
+        loginResponse.setResult(loginResult);
+        return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getNumber", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public ResponseEntity<PhoneNumberResult> getPhoneNumber(@RequestBody PhoneNumberParam params) {
+    public ResponseEntity<PhoneNumberResponse> getPhoneNumber(@RequestBody PhoneNumberParam params) {
         log.debug("Info of PhoneNumberParam:");
         log.debug(ReflectionToStringBuilder.toString(params));
         //重新封装参数，向认证平台请求校验token，获取手机号和省份等信息
         checkToken(params);
-        PhoneNumberResult result = checkToken(params);
-        return new ResponseEntity<PhoneNumberResult>(result, HttpStatus.OK);
+        PhoneNumberResponse result = checkToken(params);
+        return new ResponseEntity<PhoneNumberResponse>(result, HttpStatus.OK);
     }
 
-    private PhoneNumberResult checkToken(PhoneNumberParam params) {
+    private PhoneNumberResponse checkToken(PhoneNumberParam params) {
+        String userID = params.getUserID();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String systemtime = sdf.format(new Date());
         Map<String, String> header = new HashMap<String, String>();
@@ -108,19 +115,27 @@ public class UserAccountController {
         body.put("token", params.getToken());
         requestParam.put("header", header);
         requestParam.put("body", body);
-        PhoneNumberResult phoneNumberResult = new PhoneNumberResult();
+        PhoneNumberResponse phoneNumberResponse = new PhoneNumberResponse();
+        PhoneNumberResponse.PhoneNumberResult phoneNumberResult = phoneNumberResponse.new PhoneNumberResult();
         try {
             String paramStr = JacksonUtil.beanToJson(requestParam);
             String result = httpRequest.doPost("http://wap.cmpassport.com:8080/api/tokenValidate", paramStr);
             CheckTokenResult checkTokenResult = (CheckTokenResult) JacksonUtil.jsonToBean(result, CheckTokenResult.class);
-            phoneNumberResult.setInresponseto(checkTokenResult.getHeader().getInresponseto());
-            phoneNumberResult.setResultcode(checkTokenResult.getHeader().getResultcode());
-            phoneNumberResult.setMsisdn(checkTokenResult.getBody().getMsisdn());//可能为空
+            String phoneNumber = checkTokenResult.getBody().getMsisdn();
+            String province = checkTokenResult.getBody().getProvince();
+            String errorCode = checkTokenResult.getHeader().getResultcode();
+            phoneNumberResult.setUserID(userID);
+            phoneNumberResponse.setErrorCode(errorCode);
+            phoneNumberResult.setMsisdn(phoneNumber);//可能为空
             phoneNumberResult.setMsisdntype(checkTokenResult.getBody().getMsisdntype());
-            phoneNumberResult.setProvince(checkTokenResult.getBody().getProvince());
+            phoneNumberResult.setProvince(province);
+            userService.updatePhoneNumberAndProvince(userID,phoneNumber,province);
         } catch (Exception e) {
         }
-        return phoneNumberResult;
+        phoneNumberResponse.setStatus("success");
+        phoneNumberResponse.setErrorMsg("");
+        phoneNumberResponse.setResult(phoneNumberResult);
+        return phoneNumberResponse;
     }
 
 }

@@ -34,9 +34,9 @@ public class UserServiceImpl implements UserService {
         return userDao.updateClientID(userAccount,clientID);
     }
 
-    public boolean updatePhoneNumberAndProvince(String userAccount, String phoneNumber, String province) {
+    public boolean updatePhoneNumberAndProvince(String userID, String phoneNumber, String province) {
 
-        return userDao.updatePhoneNumberAndProvince(userAccount,phoneNumber,province);
+        return userDao.updatePhoneNumberAndProvince(userID,phoneNumber,province);
     }
 
 

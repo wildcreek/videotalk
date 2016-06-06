@@ -1,7 +1,8 @@
 package com.mateo.videotalk.controller;
 
+import com.mateo.videotalk.model.response.BaseResponse;
+import com.mateo.videotalk.model.response.FindNickNameResponse;
 import com.mateo.videotalk.service.UserInfoService;
-import com.mateo.videotalk.util.HttpRequestor;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,14 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/userinfo")
@@ -30,37 +28,35 @@ public class UserInfoController {
 
     private static Logger log = LoggerFactory.getLogger(UserInfoController.class);
     private UserInfoService userInfoService;
-    HttpRequestor httpRequest = new HttpRequestor();
-
     @Autowired
     public void setUserInfoService(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
     }
 
     @RequestMapping(value = "/nickname/find",method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, String> findNickNameByUserID(@RequestParam(value = "userID", required = true) String userID ) {
+    public ResponseEntity<FindNickNameResponse> findNickNameByUserID(@RequestParam(value = "userID", required = true) String userID ) {
+        FindNickNameResponse findNickNameResponse = new FindNickNameResponse();
+        FindNickNameResponse.FindNickNameResult findNickNameResult = findNickNameResponse.new FindNickNameResult();
         System.out.println("userID value: " + userID  );
         //数据库查询
         String nickName = userInfoService.findNickNameByUserID(userID);
-
-        HashMap<String,String> result = new HashMap<String, String>();
-        result.put("nickName",nickName);
-        return result;
-
+        findNickNameResult.setNickName(nickName);
+        findNickNameResponse.setStatus("success");
+        findNickNameResponse.setErrorCode("");
+        findNickNameResponse.setErrorMsg("");
+        findNickNameResponse.setResult(findNickNameResult);
+        return new ResponseEntity<FindNickNameResponse>(findNickNameResponse, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/nickname/update",method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, String> updateNickName(@RequestParam(value = "userID", required = true) String userID,
-                                    @RequestParam(value = "nickName", required = true) String nickName) {
+    public ResponseEntity<BaseResponse> updateNickName(@RequestParam(value = "userID", required = true) String userID,
+                                                       @RequestParam(value = "nickName", required = true) String nickName) {
         System.out.println("userID value: " + userID +"nickName vaule: " + nickName);
+        BaseResponse baseResponse ;
         //数据库插入
         boolean isSuccess = userInfoService.updateNickNameByUserID(userID ,nickName);
-        HashMap<String,String> result = new HashMap<String, String>();
-        result.put("userID",userID);
-        return result;
-
+        baseResponse = new BaseResponse("success","","");
+        return new ResponseEntity<BaseResponse>(baseResponse, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/avatar/find",method = RequestMethod.POST)
@@ -82,11 +78,11 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/avatar/update",method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, String> updateAvatarByUserID(@RequestParam(value = "userID", required = true) String userID ,
+    public ResponseEntity<BaseResponse> updateAvatarByUserID(@RequestParam(value = "userID", required = true) String userID ,
                                                     @RequestParam(value = "file", required = true) MultipartFile file , HttpServletRequest request) throws IOException{
+        BaseResponse baseResponse ;
         //生成服务端文件保存地址
-        String path = request.getSession().getServletContext().getRealPath("avatars");
+        String path = request.getSession().getServletContext().getRealPath(File.separator + "resources" + File.separator + userID + File.separator + "avatars");
         String fileName = file.getOriginalFilename();
         File targetFile = new File(path, fileName);
         System.out.println("服务端头像保存路径:" + targetFile.getAbsolutePath());
@@ -101,12 +97,8 @@ public class UserInfoController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("userID value: " + userID  );
-        HashMap<String,String> result = new HashMap<String, String>();
-        result.put("userID",userID);
-        result.put("isSuccess",isSuccess + "");
-        return result;
+        baseResponse  = new BaseResponse("success","","");
+        return new ResponseEntity<BaseResponse>(baseResponse, HttpStatus.OK);
     }
 
 }
