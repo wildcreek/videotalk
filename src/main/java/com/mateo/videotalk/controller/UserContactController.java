@@ -3,16 +3,22 @@ package com.mateo.videotalk.controller;
 import com.mateo.videotalk.model.Contact;
 import com.mateo.videotalk.model.response.BaseResponse;
 import com.mateo.videotalk.model.response.ContactResponse;
+import com.mateo.videotalk.model.response.FindAllContactResponse;
 import com.mateo.videotalk.service.UserContactService;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -29,12 +35,34 @@ public class UserContactController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<ContactResponse> createContact(@RequestBody Contact contact) {
+    public ResponseEntity<ContactResponse> createContact(@RequestParam(value = "userID", required = true) String userID ,
+                                                         @RequestParam(value = "contactName", required = true) String contactName ,
+                                                         @RequestParam(value = "contactNumber", required = true) String contactNumber ,
+                                                         @RequestParam(value = "file", required = true) MultipartFile file , HttpServletRequest request) {
         log.debug("Info of contact:");
-        log.debug(ReflectionToStringBuilder.toString(contact));
+        Contact contact = new Contact();
+        contact.setUserID(Integer.valueOf(userID));
+        contact.setContactName(contactName);
+        contact.setContactNumber(contactNumber);
+        contact.setContactAvatar(file.getOriginalFilename());
+
+        //生成服务端文件保存路径
+        String path = request.getSession().getServletContext().getRealPath(File.separator + "resources" + File.separator + userID + File.separator + "avatars");
+        String fileName = file.getOriginalFilename();
+        File targetFile = new File(path, fileName);
+        System.out.println("通讯录头像保存路径:" + targetFile.getAbsolutePath());
+        //通讯录头像保存至本地
+        if(!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+        try {
+            file.transferTo(targetFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ContactResponse response = new ContactResponse();
         ContactResponse.ContactResult result = response.new ContactResult();
-        //插入数据库并返回相应参数。
+        //插入数据库并返回相应参数
         Contact resultContact = userContactService.createContact(contact);
 
         result.setContactId(resultContact.getContactId() + "");
@@ -46,9 +74,34 @@ public class UserContactController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<BaseResponse> updateContact(@RequestBody Contact contact) {
+    public ResponseEntity<BaseResponse> updateContact(@RequestParam(value = "contactId", required = true) String contactId ,
+                                                      @RequestParam(value = "userID", required = true) String userID ,
+                                                      @RequestParam(value = "contactName", required = true) String contactName ,
+                                                      @RequestParam(value = "contactNumber", required = true) String contactNumber ,
+                                                      @RequestParam(value = "file", required = true) MultipartFile file , HttpServletRequest request) {
         log.debug("Info of contact:");
-        log.debug(ReflectionToStringBuilder.toString(contact));
+        Contact contact = new Contact();
+        contact.setContactId(Integer.valueOf(contactId));
+        contact.setUserID(Integer.valueOf(userID));
+        contact.setContactName(contactName);
+        contact.setContactNumber(contactNumber);
+        contact.setContactAvatar(file.getOriginalFilename());
+
+        //生成服务端文件保存路径
+        String path = request.getSession().getServletContext().getRealPath(File.separator + "resources" + File.separator + userID + File.separator + "avatars");
+        String fileName = file.getOriginalFilename();
+        File targetFile = new File(path, fileName);
+        System.out.println("通讯录头像保存路径:" + targetFile.getAbsolutePath());
+        //通讯录头像保存至本地
+        if(!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+        try {
+            file.transferTo(targetFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         BaseResponse baseResponse ;
         //接收到更新用户联系人请求。如联系人已经存在，则更新；不存在，则插入数据库并返回相应参数。
         //不存在则创建
@@ -67,18 +120,28 @@ public class UserContactController {
         if (isSuccess) {
             baseResponse = new BaseResponse("success","","");
         } else {
-            baseResponse = new BaseResponse("failure","","插入数据库失败");
+            baseResponse = new BaseResponse("failure","","数据库删除失败");
         }
         return new ResponseEntity<BaseResponse>(baseResponse, HttpStatus.OK);
 
     }
 
     @RequestMapping(value = "/find_all", method = RequestMethod.POST)
-    public ResponseEntity<List<Contact>> findAvatarByUserID(@RequestParam(value = "userID", required = true) int userID) {
+    public ResponseEntity<FindAllContactResponse> findAvatarByUserID(@RequestParam(value = "userID", required = true) int userID) {
         System.out.println("userID value: " + userID);
+        FindAllContactResponse response = new FindAllContactResponse();
         //数据库查询
         List<Contact> contacts = userContactService.findAllContacts(userID);
-        return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
+        String avatar;
+        for (Contact contact: contacts) {
+            avatar =  "http://localhost:8080/resources/" + userID + "/avatars/" + contact.getContactAvatar();
+            contact.setContactAvatar(avatar);
+        }
+        response.setStatus("success");
+        response.setErrorCode("");
+        response.setErrorMsg("");
+        response.setResult(contacts);
+        return new ResponseEntity<FindAllContactResponse>(response, HttpStatus.OK);
     }
 
 }

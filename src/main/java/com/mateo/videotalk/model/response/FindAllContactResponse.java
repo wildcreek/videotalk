@@ -10,4 +10,22 @@ import java.util.List;
 public class FindAllContactResponse extends BaseResponse{
     private List<Contact> result;
 
+    public FindAllContactResponse() {
+
+    }
+
+    public List<Contact> getResult() {
+        return result;
+    }
+
+    public void setResult(List<Contact> result) {
+        this.result = result;
+    }
+
+    @Override
+    public String toString() {
+        return "FindAllContactResponse{" +
+                "result=" + result +
+                '}';
+    }
 }

@@ -3,6 +3,8 @@ package com.mateo.videotalk.test;
 import com.mateo.videotalk.Constant;
 import com.squareup.okhttp.*;
 import com.squareup.okhttp.Request.Builder;
+
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -19,11 +21,13 @@ public class TestUserContact {
 
     public static void testCreateContact() {
         OkHttpClient client = new OkHttpClient();
+        MediaType mediaType = MediaType.parse("multipart/form-data; charset=utf-8");
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
-        builder.addFormDataPart("userID", "2000000001");
-        builder.addFormDataPart("contactName", "okhttpCreatedContactName");
-        builder.addFormDataPart("contactNumber", "okhttpCreatedContactNumber");
-        builder.addFormDataPart("contactAvatar", "okhttpCreatedContactAvatar");
+        builder.addFormDataPart("userID", "2000000008");
+        builder.addFormDataPart("contactName", "heheh");
+        builder.addFormDataPart("contactNumber", "hhha");
+        File file = new File("C:\\avatar1.jpg");
+        builder.addFormDataPart("file", "avatar1.jpg", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
         Request request = new Builder().url(Constant.CREATE_USER_CONTACT_URL).post(requestBody)
                 .build();
@@ -41,12 +45,14 @@ public class TestUserContact {
 
     public static void testUpdateContact() {
         OkHttpClient client = new OkHttpClient();
+        MediaType mediaType = MediaType.parse("multipart/form-data; charset=utf-8");
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
         builder.addFormDataPart("contactId", "8");
-        builder.addFormDataPart("userID", "2000000001");
-        builder.addFormDataPart("contactName", "testContactName");
-        builder.addFormDataPart("contactNumber", "testContactNumber");
-        builder.addFormDataPart("contactAvatar", "testContactAvatar");
+        builder.addFormDataPart("userID", "2000000008");
+        builder.addFormDataPart("contactName", "666666");
+        builder.addFormDataPart("contactNumber", "666666");
+        File file = new File("C:\\avatar2.jpg");
+        builder.addFormDataPart("file", "avatar2.jpg", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
         Request request = new Builder().url(Constant.UPDATE_USER_CONTACT_URL).post(requestBody)
                 .build();
@@ -66,7 +72,7 @@ public class TestUserContact {
         OkHttpClient client = new OkHttpClient();
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
         builder.addFormDataPart("contactId", "13");
-        builder.addFormDataPart("userID", "2000000001");
+        builder.addFormDataPart("userID", "2000000008");
         RequestBody requestBody = builder.build();
         Request request = new Builder().url(Constant.DELETE_USER_CONTACT_URL).post(requestBody)
                 .build();
@@ -85,7 +91,7 @@ public class TestUserContact {
     public static void testFindAllContacts() {
         OkHttpClient client = new OkHttpClient();
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
-        builder.addFormDataPart("userID", "2000000001");
+        builder.addFormDataPart("userID", "2000000008");
         RequestBody requestBody = builder.build();
         Request request = new Builder().url(Constant.FIND_ALL_CONTACT_URL).post(requestBody)
                 .build();
