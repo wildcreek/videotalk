@@ -8,7 +8,11 @@ import com.mateo.videotalk.model.response.PhoneNumberResponse;
 import com.mateo.videotalk.service.UserService;
 import com.mateo.videotalk.util.HttpRequestor;
 import com.mateo.videotalk.util.JacksonUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -94,7 +100,6 @@ public class UserAccountController {
         log.debug("Info of PhoneNumberParam:");
         log.debug(ReflectionToStringBuilder.toString(params));
         //重新封装参数，向认证平台请求校验token，获取手机号和省份等信息
-        checkToken(params);
         PhoneNumberResponse result = checkToken(params);
         return new ResponseEntity<PhoneNumberResponse>(result, HttpStatus.OK);
     }
@@ -119,7 +124,9 @@ public class UserAccountController {
         PhoneNumberResponse.PhoneNumberResult phoneNumberResult = phoneNumberResponse.new PhoneNumberResult();
         try {
             String paramStr = JacksonUtil.beanToJson(requestParam);
+            log.error("校验token请求信息：" + paramStr);
             String result = httpRequest.doPost("http://wap.cmpassport.com:8080/api/tokenValidate", paramStr);
+            log.error("校验token返回信息：" + result);
             CheckTokenResult checkTokenResult = (CheckTokenResult) JacksonUtil.jsonToBean(result, CheckTokenResult.class);
             String phoneNumber = checkTokenResult.getBody().getMsisdn();
             String province = checkTokenResult.getBody().getProvince();
@@ -128,14 +135,31 @@ public class UserAccountController {
             phoneNumberResponse.setErrorCode(errorCode);
             phoneNumberResult.setMsisdn(phoneNumber);//可能为空
             phoneNumberResult.setMsisdntype(checkTokenResult.getBody().getMsisdntype());
+            if(StringUtils.isEmpty(province)&&!StringUtils.isEmpty(phoneNumber)){
+                String xmlResult = httpRequest.doGet("http://life.tenpay.com/cgi-bin/mobile/MobileQueryAttribution.cgi?chgmobile=" + phoneNumber);
+                province = parseXmlResult(xmlResult);
+            }
             phoneNumberResult.setProvince(province);
             userService.updatePhoneNumberAndProvince(userID,phoneNumber,province);
         } catch (Exception e) {
+            log.error("获取手机号码异常:" + e.toString());
+            e.printStackTrace();
         }
         phoneNumberResponse.setStatus("success");
         phoneNumberResponse.setErrorMsg("");
         phoneNumberResponse.setResult(phoneNumberResult);
         return phoneNumberResponse;
     }
-
+    private String parseXmlResult(String xmlResult){
+        String province = "";
+        try {
+            SAXReader reader = new SAXReader();
+            Document doc = reader.read(new ByteArrayInputStream(xmlResult.getBytes("GBK")));
+            Element root = doc.getRootElement();
+            province = root.element("province").getText();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return province;
+    }
 }
