@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 
@@ -39,7 +38,6 @@ public class UserLogController {
             mFile = files[i];
             if (!mFile.isEmpty()) {
                 try {
-                    log.error("上传文件名:" + mFile.getOriginalFilename());
                     String fileName = mFile.getOriginalFilename();
                     String path = request.getSession().getServletContext().getRealPath(File.separator + "resources" + File.separator + userID + File.separator + "logs");
                     File localFile = new File(path, fileName);
