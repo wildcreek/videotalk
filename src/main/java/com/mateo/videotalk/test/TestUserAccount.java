@@ -28,9 +28,9 @@ public class TestUserAccount {
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         JSONObject params = new JSONObject();
-        params.put("userAccount", "test");
+        params.put("userAccount", "66666");
         params.put("clientType", "phone");
-        params.put("clientID", "8888");
+        params.put("clientID", "66666");
         params.put("loginType", "3");
         RequestBody requestBody = RequestBody.create(mediaType, params.toJSONString());
         System.out.println("登录请求参数:" + params.toJSONString());
