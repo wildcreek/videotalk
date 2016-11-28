@@ -31,7 +31,13 @@
 
     <!-- 静态资源处理， mapping 为url后拼接的地址，location为文件夹位置 -->
     <mvc:resources mapping="/resources/**" location="/resources/"/>
-
+    <!--拦截器设置-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/"/>
+            <bean class="com.mateo.videotalk.intercepter.AuthIntercepter"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <!-- 配置ViewResolver。 可以用多个ViewResolver。 使用order属性排序。 InternalResourceViewResolver放在最后。 -->
     <bean

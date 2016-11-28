@@ -24,7 +24,8 @@
          -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:spring/mvc-dispatcher-servlet.xml</param-value>
+            <param-value>classpath:spring/mvc-dispatcher-servlet.xml,classpath:spring/spring-dao.xml,
+                classpath:spring/spring-service.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -33,4 +34,18 @@
         <!-- mvc-dispatcher拦截所有的请求-->
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <!--过滤器 过滤url参数-->
+    <filter>
+        <filter-name>encoding</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf8</param-value>
+        </init-param>
+            
+    </filter>
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
 </web-app>
