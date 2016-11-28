@@ -50,6 +50,7 @@ public class UserAccountController {
 //        @RequestParam(value = "loginType", required = true) String loginType
         log.debug("Info of loginParam(user):");
         log.debug(ReflectionToStringBuilder.toString(user));
+
         String clientID = user.getClientID();
         String clientType = user.getClientType();
         String userAccount = user.getUserAccount();

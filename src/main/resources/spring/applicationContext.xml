@@ -10,8 +10,8 @@
     <context:annotation-config/>
     <!--DispatcherServlet上下文，只搜索@Controller标注的类 不搜索其他标注的类-->
     <!--<context:component-scan base-package="com.mateo.videotalk">-->
-        <!--<context:exclude-filter type="annotation"-->
-                                <!--expression="org.springframework.stereotype.Controller"/>-->
+    <!--<context:exclude-filter type="annotation"-->
+    <!--expression="org.springframework.stereotype.Controller"/>-->
     <!--</context:component-scan>-->
     <!--配置整合mybatis过程-->
     <!--1.配置数据库相关参数-->
@@ -19,10 +19,10 @@
     <!--2.配置数据库连接池-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
-        <property name="driverClassName" value="${driver}" />
-        <property name="url" value="${url}" />
-        <property name="username" value="${jdbc.username}" />
-        <property name="password" value="${jdbc.password}" />
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
         <!-- 初始化连接大小 -->
         <property name="initialSize" value="${initialSize}"></property>
         <!-- 连接池最大数量 -->
@@ -38,7 +38,7 @@
     <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <!--注入数据库连接池-->
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dataSource"/>
         <!--配置MyBatis全局配置文件 mybatis-config.xml ,classPath 目录为java目录和resource目录-->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!--扫描entity包，使用别名，即使用类名代替全类名-->
@@ -52,7 +52,31 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
         <!--给出需要扫描dao接口包-->
-        <property name="basePackage" value="com.mateo.videotalk.dao" />
+        <property name="basePackage" value="com.mateo.videotalk.dao"/>
     </bean>
     <context:component-scan base-package="com.mateo.videotalk.dao"/>
+
+    <!--配置redis相关参数-->
+    <context:property-placeholder location="classpath:redis.properties"/>
+    <context:component-scan base-package="com.mateo.videotalk.redis.dao">
+    </context:component-scan>
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxActive" value="${redis.maxActive}"/>
+        <property name="maxWait" value="${redis.maxWait}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.pass}"/>
+        <property name="poolConfig" value="poolConfig"/>
+    </>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <bean id="tokenDao" class="com.mateo.videotalk.redis.TokenDaoImpl"/>
+
 </beans>
