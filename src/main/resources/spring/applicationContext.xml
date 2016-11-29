@@ -58,8 +58,6 @@
 
     <!--配置redis相关参数-->
     <context:property-placeholder location="classpath:redis.properties"/>
-    <context:component-scan base-package="com.mateo.videotalk.redis.dao">
-    </context:component-scan>
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxIdle" value="${redis.maxIdle}"/>
         <property name="maxActive" value="${redis.maxActive}"/>
@@ -72,11 +70,9 @@
         <property name="port" value="${redis.port}"/>
         <property name="password" value="${redis.pass}"/>
         <property name="poolConfig" value="poolConfig"/>
-    </>
-    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+    </bean>
+    <bean id="redis" class="org.springframework.data.redis.core.StringRedisTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
-
-    <bean id="tokenDao" class="com.mateo.videotalk.redis.TokenDaoImpl"/>
 
 </beans>

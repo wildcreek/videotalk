@@ -26,6 +26,15 @@
           userAccount = #{userAccount}
 
     </select>
+    <select id="findUserByUserID" resultType="User">
+        SELECT
+        userID,userAccount,clientType,clientID,loginType,phoneNumber,province
+        FROM
+        useraccount
+        WHERE
+        userID = #{userID}
+
+    </select>
     <insert id="insertUser" >
 
         INSERT INTO
