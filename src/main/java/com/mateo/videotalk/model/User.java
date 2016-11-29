@@ -31,6 +31,10 @@ public class User {
      **/
     private Long userID;
     /**
+     * 平台自动生成的10位或11位数字，表示用户ID
+     **/
+    private String password;
+    /**
      * 手机号码
      **/
     private String phoneNumber;
@@ -95,6 +99,14 @@ public class User {
         this.province = province;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -103,6 +115,7 @@ public class User {
                 ", clientID='" + clientID + '\'' +
                 ", loginType='" + loginType + '\'' +
                 ", userID=" + userID +
+                ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", province='" + province + '\'' +
                 '}';

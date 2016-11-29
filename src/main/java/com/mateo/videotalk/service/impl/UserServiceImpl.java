@@ -18,6 +18,12 @@ public class UserServiceImpl implements UserService {
         User user  = userDao.findUserByUserAccount(userAccount);
         return user;
     }
+
+    public User findUserByUserID(String userID){
+        User user  = userDao.findUserByUserID(userID);
+        return user;
+    }
+
     public boolean insertUser(User user){
         String clientType = user.getClientType();
         long userID = userDao.getLatestUserIDByClientType(clientType) + 1;
