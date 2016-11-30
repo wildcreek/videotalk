@@ -19,13 +19,14 @@
     <!-- DispatcherServlet, Spring MVC的核心 -->
     <servlet>
         <servlet-name>mvc-dispatcher</servlet-name>
-        <servlet-class> org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <!-- DispatcherServlet对应的上下文配置， 默认为/WEB-INF/$servlet-name$-servlet.xml
          -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath:spring/mvc-dispatcher-servlet.xml,classpath:spring/spring-dao.xml,
-                classpath:spring/spring-service.xml</param-value>
+                classpath:spring/spring-service.xml
+            </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -42,10 +43,19 @@
             <param-name>encoding</param-name>
             <param-value>utf8</param-value>
         </init-param>
-            
+
     </filter>
     <filter-mapping>
         <filter-name>encoding</filter-name>
         <url-pattern>*</url-pattern>
     </filter-mapping>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>securedapp</web-resource-name>
+            <url-pattern>/tokens/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>
