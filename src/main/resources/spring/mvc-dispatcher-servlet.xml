@@ -18,18 +18,18 @@
     <context:annotation-config/>
 
     <!-- DispatcherServlet上下文， 只管理@Controller类型的bean， 忽略其他型的bean, 如@Service -->
-    <context:component-scan base-package="com.mateo.videotalk">
+    <context:component-scan base-package="com.wildcreek.videotalk">
         <context:include-filter type="annotation"
                                 expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-    <context:component-scan base-package="com.mateo.videotalk.authorization.manager"/>
+    <context:component-scan base-package="com.wildcreek.videotalk.authorization.manager"/>
     <!-- HandlerMapping, 无需配置， Spring MVC可以默认启动。 DefaultAnnotationHandlerMapping
         annotation-driven HandlerMapping -->
 
     <!-- 扩充了注解驱动，可以将请求参数绑定到控制器参数 -->
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
-            <bean class="com.mateo.videotalk.authorization.resolvers.CurrentUserMethodArgumentResolver"/>
+            <bean class="com.wildcreek.videotalk.authorization.resolvers.CurrentUserMethodArgumentResolver"/>
         </mvc:argument-resolvers>
     </mvc:annotation-driven>
     <!-- 静态资源处理， mapping 为url后拼接的地址，location为文件夹位置 -->
@@ -37,8 +37,8 @@
     <!--拦截器设置-->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/"/>
-            <bean class="com.mateo.videotalk.authorization.interceptor.AuthorizationInterceptor"></bean>
+            <mvc:mapping path="/account/*"/>
+            <bean class="com.wildcreek.videotalk.authorization.interceptor.AuthorizationInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
     <!-- 配置ViewResolver。 可以用多个ViewResolver。 使用order属性排序。 InternalResourceViewResolver放在最后。 -->

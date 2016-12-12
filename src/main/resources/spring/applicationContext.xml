@@ -15,7 +15,7 @@
     <!--</context:component-scan>-->
     <!--配置整合mybatis过程-->
     <!--1.配置数据库相关参数-->
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
     <!--2.配置数据库连接池-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
@@ -52,12 +52,12 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
         <!--给出需要扫描dao接口包-->
-        <property name="basePackage" value="com.mateo.videotalk.dao"/>
+        <property name="basePackage" value="com.wildcreek.videotalk.dao"/>
     </bean>
-    <context:component-scan base-package="com.mateo.videotalk.dao"/>
+    <context:component-scan base-package="com.wildcreek.videotalk.dao"/>
 
     <!--配置redis相关参数-->
-    <context:property-placeholder location="classpath:redis.properties"/>
+    <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxIdle" value="${redis.maxIdle}"/>
         <property name="maxActive" value="${redis.maxActive}"/>
@@ -69,7 +69,7 @@
         <property name="hostName" value="${redis.host}"/>
         <property name="port" value="${redis.port}"/>
         <property name="password" value="${redis.pass}"/>
-        <property name="poolConfig" value="poolConfig"/>
+        <property name="poolConfig" ref="poolConfig"/>
     </bean>
     <bean id="redis" class="org.springframework.data.redis.core.StringRedisTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>

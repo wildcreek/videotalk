@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mateo.videotalk.dao.UserDao">
+<mapper namespace="com.wildcreek.videotalk.dao.UserDao">
     <!--为DAO接口方法提供sql语句配置-->
     <select id="getLatestUserIDByClientType" resultType="long" parameterType="String">
         SELECT
@@ -28,7 +28,7 @@
     </select>
     <select id="findUserByUserID" resultType="User">
         SELECT
-        userID,userAccount,clientType,clientID,loginType,phoneNumber,province
+        userID,userAccount,clientType,clientID,loginType,phoneNumber,province,password
         FROM
         useraccount
         WHERE
