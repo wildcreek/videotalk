@@ -9,7 +9,7 @@
     <!--激活@Required @Autowired,JSR 250'S @PostContruct@Resource等注解-->
     <context:annotation-config/>
     <!--DispatcherServlet上下文，只搜索@Controller标注的类 不搜索其他标注的类-->
-    <!--<context:component-scan base-package="com.mateo.videotalk">-->
+    <!--<context:component-scan base-package="com.wildcreek.videotalk">-->
     <!--<context:exclude-filter type="annotation"-->
     <!--expression="org.springframework.stereotype.Controller"/>-->
     <!--</context:component-scan>-->
@@ -42,8 +42,8 @@
         <!--配置MyBatis全局配置文件 mybatis-config.xml ,classPath 目录为java目录和resource目录-->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!--扫描entity包，使用别名，即使用类名代替全类名-->
-        <property name="typeAliasesPackage" value="com.mateo.videotalk.model;
-        com.mateo.videotalk.model.request;com.mateo.videotalk.model.response"/>
+        <property name="typeAliasesPackage" value="com.wildcreek.videotalk.model;
+        com.wildcreek.videotalk.model.request;com.wildcreek.videotalk.model.response"/>
         <!-- 自动扫描sql配置文件：mapper需要的xml文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
     </bean>

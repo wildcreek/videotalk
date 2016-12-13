@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     User findUserByUserAccount(String userAccount);
+    User findUserByPhoneNumber(String phoneNumber);
     User findUserByUserID(String userID);
     boolean insertUser(User user);
     boolean updateClientID(String userAccount,String clientID);

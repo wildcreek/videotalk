@@ -19,6 +19,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    public User findUserByPhoneNumber(String phoneNumber) {
+        User user  = userDao.findUserByPhoneNumber(phoneNumber);
+        return user;
+    }
+
     public User findUserByUserID(String userID){
         User user  = userDao.findUserByUserID(userID);
         return user;
@@ -32,7 +37,8 @@ public class UserServiceImpl implements UserService {
         String loginType = user.getLoginType();
         String phoneNumber = user.getPhoneNumber();
         String province = user.getProvince();
-        return userDao.insertUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province);
+        String password = user.getPassword();
+        return userDao.insertUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province,password);
     }
 
     public boolean updateClientID(String userAccount, String clientID) {

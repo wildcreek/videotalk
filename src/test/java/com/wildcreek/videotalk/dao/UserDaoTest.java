@@ -36,7 +36,7 @@ public class UserDaoTest {
         user.setUserAccount("testphone3");
         user.setProvince("jiangsu");
         user.setUserID(userID);
-        userDao.insertUser(userID, user.getUserAccount(), user.getClientType(), user.getClientID(), user.getLoginType(), user.getPhoneNumber(), user.getProvince());
+        userDao.insertUser(userID, user.getUserAccount(), user.getClientType(), user.getClientID(), user.getLoginType(), user.getPhoneNumber(), user.getProvince(),user.getPassword());
     }
 
     @Test

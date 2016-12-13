@@ -1,7 +1,6 @@
 package com.wildcreek.videotalk.test;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wildcreek.videotalk.Constant;
 import com.squareup.okhttp.*;
 import com.squareup.okhttp.Request.Builder;
 
@@ -30,7 +29,7 @@ public class TestUserContact {
         File file = new File("C:\\avatar1.jpg");
         builder.addFormDataPart("file", "avatar1.jpg", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
-        Request request = new Builder().url(Constant.CREATE_USER_CONTACT_URL).post(requestBody)
+        Request request = new Builder().url(IseeUrl.CREATE_USER_CONTACT_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 
@@ -55,7 +54,7 @@ public class TestUserContact {
         File file = new File("C:\\avatar2.jpg");
         builder.addFormDataPart("file", "avatar2.jpg", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
-        Request request = new Builder().url(Constant.UPDATE_USER_CONTACT_URL).post(requestBody)
+        Request request = new Builder().url(IseeUrl.UPDATE_USER_CONTACT_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 
@@ -77,7 +76,7 @@ public class TestUserContact {
         params.put("userID", "2000000008");
         RequestBody requestBody = RequestBody.create(mediaType, params.toJSONString());
         System.out.println("删除联系人请求参数:" + params.toJSONString());
-        Request request = new Builder().url(Constant.DELETE_USER_CONTACT_URL).post(requestBody)
+        Request request = new Builder().url(IseeUrl.DELETE_USER_CONTACT_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 
@@ -98,7 +97,7 @@ public class TestUserContact {
         params.put("userID", "2000000008");
         RequestBody requestBody = RequestBody.create(mediaType, params.toJSONString());
         System.out.println("获取所有联系人请求参数:" + params.toJSONString());
-        Request request = new Builder().url(Constant.FIND_ALL_CONTACT_URL).post(requestBody)
+        Request request = new Builder().url(IseeUrl.FIND_ALL_CONTACT_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 

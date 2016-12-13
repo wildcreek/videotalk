@@ -3,6 +3,8 @@ package com.wildcreek.videotalk.authorization.manager.impl;
 import com.wildcreek.videotalk.authorization.manager.TokenManager;
 import com.wildcreek.videotalk.authorization.model.TokenModel;
 import com.wildcreek.videotalk.config.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
@@ -16,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class RedisTokenManager implements TokenManager {
-
+    private static Logger log = LoggerFactory.getLogger(RedisTokenManager.class);
     private RedisTemplate<Long, String> redis;
 
     @Autowired
@@ -32,6 +34,7 @@ public class RedisTokenManager implements TokenManager {
         TokenModel model = new TokenModel(userId, token);
         //存储到redis并设置过期时间
         redis.boundValueOps(userId).set(token, Constants.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
+        log.debug("redis->key=" + userId + ",value=" + redis.boundValueOps(userId).get());
         return model;
     }
 

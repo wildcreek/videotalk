@@ -19,7 +19,7 @@
     </select>
     <select id="findUserByUserAccount" resultType="User">
         SELECT
-          userID,userAccount,clientType,clientID,loginType,phoneNumber,province
+          userID,userAccount,clientType,clientID,loginType,phoneNumber,province,password
         FROM
           useraccount
         WHERE
@@ -35,12 +35,21 @@
         userID = #{userID}
 
     </select>
+    <select id="findUserByPhoneNumber" resultType="User">
+        SELECT
+        userID,userAccount,clientType,clientID,loginType,phoneNumber,province,password
+        FROM
+        useraccount
+        WHERE
+        phoneNumber = #{phoneNumber}
+
+    </select>
     <insert id="insertUser" >
 
         INSERT INTO
-        useraccount ( userID,userAccount,clientType,clientID,loginType,phoneNumber,province)
+        useraccount ( userID,userAccount,clientType,clientID,loginType,phoneNumber,province,password)
         VALUES
-         (#{userID},#{userAccount},#{clientType},#{clientID},#{loginType},#{phoneNumber},#{province})
+         (#{userID},#{userAccount},#{clientType},#{clientID},#{loginType},#{phoneNumber},#{province},#{password})
 
     </insert>
     <update id="updateClientID" >

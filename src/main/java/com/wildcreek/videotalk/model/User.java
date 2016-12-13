@@ -43,6 +43,18 @@ public class User {
      **/
     private String province;
 
+    public User() {
+    }
+
+    public User(String userAccount, String clientType, String clientID, String loginType, String password) {
+        this.userAccount = userAccount;
+        this.clientType = clientType;
+        this.clientID = clientID;
+        this.loginType = loginType;
+        this.password = password;
+        this.phoneNumber = userAccount;
+    }
+
     public String getClientType() {
         return clientType;
     }

@@ -1,6 +1,5 @@
 package com.wildcreek.videotalk.test;
 
-import com.wildcreek.videotalk.Constant;
 import com.squareup.okhttp.*;
 
 import java.io.File;
@@ -23,7 +22,7 @@ public class TestUserLog {
         File file = new File("C:\\test.txt");
         builder.addFormDataPart("file", "test.txt", RequestBody.create(mediaType, file));
         RequestBody requestBody = builder.build();
-        Request request = new Request.Builder().url(Constant.UPLOAD_LOG_URL).post(requestBody)
+        Request request = new Request.Builder().url(IseeUrl.UPLOAD_LOG_URL).post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
 
