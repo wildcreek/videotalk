@@ -50,8 +50,8 @@ public class UserAccountController {
                 return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USER_ALREADY_EXISTED),HttpStatus.OK);
             }else{//不存在,直接插入
                 User resultUser = new User(phoneNumber,"phone",clientId,"0",password);
-                boolean isSuccess = userService.insertUser(resultUser);
-                if(isSuccess){//插入新用户成功
+                String userID = userService.insertUser(resultUser);
+                if(!userID.equals("")){//插入新用户成功
                     return new ResponseEntity<ResultModel>(ResultModel.ok(),HttpStatus.OK);
                 }else{//插入新用户失败
                     return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USER_CREATE_FAILURE),HttpStatus.OK);

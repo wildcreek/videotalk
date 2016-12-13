@@ -12,7 +12,8 @@ public enum ResultStatus {
     USER_NOT_LOGIN(-1003, "用户未登录"),
     USER_ALREADY_EXISTED(-1004, "用户已经存在"),
     USER_CREATE_FAILURE(-1005, "用户创建失败"),
-    SMSCODE_VERIFY_FAILURE(-1006, "短信验证码校验失败"),;
+    SMSCODE_VERIFY_FAILURE(-1006, "短信验证码校验失败"),
+    AUTH_TOKEN_VERIFY_FAILURE(-1007, "认证token校验失败");
 
     /**
      * 返回码

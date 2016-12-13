@@ -113,9 +113,8 @@ public class UserSessionController {
             //TODO 生成userID，将相关数据插入数据库,此时userID为空
             //resultUser.setPhoneNumber(localUser.getPhoneNumber());
             // resultUser.setProvince(localUser.getProvince());
-            boolean isSuccess = userService.insertUser(resultUser);
-            if (isSuccess) {
-                String userID = userService.findUserByUserAccount(userAccount).getUserID() + "";
+            String userID = userService.insertUser(resultUser);
+            if (!userID.equals("")) {
                 loginResult.setUserID(userID);
             }
             loginResult.setFirstLogin("true");
@@ -154,27 +153,42 @@ public class UserSessionController {
             String phoneNumber = checkTokenResult.getBody().getMsisdn();
             String province = checkTokenResult.getBody().getProvince();
             String errorCode = checkTokenResult.getHeader().getResultcode();
-            if (phoneNumber != null && !phoneNumber.equals("null")){//校验token成功
-                User localUser = userService.findUserByPhoneNumber(phoneNumber);
-                if (localUser == null) {//不存在,直接插入
-                    User resultUser = new User(phoneNumber,"phone",params.getClientID(),"0","");
-                    boolean isSuccess = userService.insertUser(resultUser);
-                    if(isSuccess){//插入新用户成功
-                        return ResultModel.ok();
-                    }else{//插入新用户失败
-                        return ResultModel.error(ResultStatus.USER_CREATE_FAILURE);
-                    }
-                }
-            }else{//校验token失败
+            String userID = "";
+            String changeDevice = "";
+            HashMap<String, String> response = new HashMap<String, String>();
+            response.put("phoneNumber", phoneNumber);
+            response.put("userToken", params.getToken());
+            response.put("expireTime", "72");
+            User localUser = userService.findUserByPhoneNumber(phoneNumber);
 
+            if (localUser == null) {//不存在,直接插入
+                User resultUser = new User(phoneNumber,"phone",params.getClientID(),"0","");
+                userID = userService.insertUser(resultUser);
+                changeDevice ="false";
+                if(userID.equals("")){//插入新用户失败
+                    return ResultModel.error(ResultStatus.USER_CREATE_FAILURE);
+                }
+            }else{//该用户已经存在
+                userID = localUser.getUserID()+"";
+                changeDevice = params.getClientID().equals(localUser.getClientID()) ? "false":"true";
             }
             if (StringUtils.isEmpty(province) && !StringUtils.isEmpty(phoneNumber)) {
                 String xmlResult = httpRequest.doGet("http://life.tenpay.com/cgi-bin/mobile/MobileQueryAttribution.cgi?chgmobile=" + phoneNumber);
                 province = parseXmlResult(xmlResult);
+                userService.updatePhoneNumberAndProvince(userID, phoneNumber, province);
             }
-            //userService.updatePhoneNumberAndProvince(userID, phoneNumber, province);
-        } catch (Exception e) {//校验token失败
-            log.error("获取手机号码异常:" + e.toString());
+
+            response.put("userID", userID);
+            response.put("changeDevice",changeDevice);
+
+            if (phoneNumber != null && !phoneNumber.equals("null")){//校验token成功
+                return ResultModel.ok(response);
+            }else{//校验token失败
+                return new ResultModel(-1007,"认证token校验失败，errorCode："+ errorCode,response);
+            }
+
+        } catch (Exception e) {//请求校验token异常
+            log.error("请求校验token异常:" + e.toString());
             e.printStackTrace();
         }
         return ResultModel.ok();

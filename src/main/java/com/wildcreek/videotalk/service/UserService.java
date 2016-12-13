@@ -12,7 +12,7 @@ public interface UserService {
     User findUserByUserAccount(String userAccount);
     User findUserByPhoneNumber(String phoneNumber);
     User findUserByUserID(String userID);
-    boolean insertUser(User user);
+    String insertUser(User user);
     boolean updateClientID(String userAccount,String clientID);
     boolean updatePhoneNumberAndProvince(String userID,String phoneNumber,String province);
 

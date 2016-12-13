@@ -13,23 +13,24 @@ public class UserServiceImpl implements UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
-    private UserDao userDao ;
-    public User findUserByUserAccount(String userAccount){
-        User user  = userDao.findUserByUserAccount(userAccount);
+    private UserDao userDao;
+
+    public User findUserByUserAccount(String userAccount) {
+        User user = userDao.findUserByUserAccount(userAccount);
         return user;
     }
 
     public User findUserByPhoneNumber(String phoneNumber) {
-        User user  = userDao.findUserByPhoneNumber(phoneNumber);
+        User user = userDao.findUserByPhoneNumber(phoneNumber);
         return user;
     }
 
-    public User findUserByUserID(String userID){
-        User user  = userDao.findUserByUserID(userID);
+    public User findUserByUserID(String userID) {
+        User user = userDao.findUserByUserID(userID);
         return user;
     }
 
-    public boolean insertUser(User user){
+    public String insertUser(User user) {
         String clientType = user.getClientType();
         long userID = userDao.getLatestUserIDByClientType(clientType) + 1;
         String userAccount = user.getUserAccount();
@@ -38,17 +39,21 @@ public class UserServiceImpl implements UserService {
         String phoneNumber = user.getPhoneNumber();
         String province = user.getProvince();
         String password = user.getPassword();
-        return userDao.insertUser(userID,userAccount,clientType,clientID,loginType,phoneNumber,province,password);
+        boolean isSuccess = userDao.insertUser(userID, userAccount, clientType, clientID, loginType, phoneNumber, province, password);
+        if (isSuccess) {
+            return userID + "";
+        }
+        return "";
     }
 
     public boolean updateClientID(String userAccount, String clientID) {
 
-        return userDao.updateClientID(userAccount,clientID);
+        return userDao.updateClientID(userAccount, clientID);
     }
 
     public boolean updatePhoneNumberAndProvince(String userID, String phoneNumber, String province) {
 
-        return userDao.updatePhoneNumberAndProvince(userID,phoneNumber,province);
+        return userDao.updatePhoneNumberAndProvince(userID, phoneNumber, province);
     }
 
 

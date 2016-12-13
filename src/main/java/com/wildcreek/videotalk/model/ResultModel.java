@@ -71,4 +71,5 @@ public class ResultModel {
     public static ResultModel error(ResultStatus error) {
         return new ResultModel(error);
     }
+
 }
