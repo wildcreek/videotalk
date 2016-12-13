@@ -3,13 +3,14 @@ package com.wildcreek.videotalk.model.request;
 /**
  * Created by Administrator on 2016/5/28.
  */
-public class PhoneNumberParam {
+public class PhoneAuthLoginParam {
     private String version;
-    private String userID;
+    private String clientID;
     private String msgid;
     private String sourceid;
     private String appid;
     private String token;
+
 
     public String getVersion() {
         return version;
@@ -19,12 +20,12 @@ public class PhoneNumberParam {
         this.version = version;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getClientID() {
+        return clientID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
     }
 
     public String getToken() {
@@ -61,9 +62,9 @@ public class PhoneNumberParam {
 
     @Override
     public String toString() {
-        return "PhoneNumberParam{" +
+        return "PhoneAuthLoginParam{" +
                 "version='" + version + '\'' +
-                ", userID='" + userID + '\'' +
+                ", clientID='" + clientID + '\'' +
                 ", msgid='" + msgid + '\'' +
                 ", sourceid='" + sourceid + '\'' +
                 ", appid='" + appid + '\'' +

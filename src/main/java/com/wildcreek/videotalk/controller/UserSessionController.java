@@ -7,11 +7,10 @@ import com.wildcreek.videotalk.authorization.model.TokenModel;
 import com.wildcreek.videotalk.config.ResultStatus;
 import com.wildcreek.videotalk.model.ResultModel;
 import com.wildcreek.videotalk.model.User;
+import com.wildcreek.videotalk.model.request.PhoneAuthLoginParam;
 import com.wildcreek.videotalk.model.request.PhoneLoginParam;
-import com.wildcreek.videotalk.model.request.PhoneNumberParam;
 import com.wildcreek.videotalk.model.response.CheckTokenResult;
 import com.wildcreek.videotalk.model.response.LoginResponse;
-import com.wildcreek.videotalk.model.response.PhoneNumberResponse;
 import com.wildcreek.videotalk.service.UserService;
 import com.wildcreek.videotalk.util.HttpRequestor;
 import com.wildcreek.videotalk.util.JacksonUtil;
@@ -61,22 +60,23 @@ public class UserSessionController {
         }
         //生成一个token，保存用户登录状态
         TokenModel model = tokenManager.createToken(user.getUserID());
-        HashMap<String,String> response = new HashMap<String, String>();
-        response.put("userID",user.getUserID()+"");
-        response.put("phoneNumber",userAccount);
-        response.put("userToken",model.getToken());
-        response.put("expireTime","72");
+        HashMap<String, String> response = new HashMap<String, String>();
+        response.put("userID", user.getUserID() + "");
+        response.put("phoneNumber", userAccount);
+        response.put("userToken", model.getToken());
+        response.put("expireTime", "72");
 
         return new ResponseEntity<ResultModel>(ResultModel.ok(response), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/phone_auth_login", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public ResponseEntity<PhoneNumberResponse> getPhoneNumber(@RequestBody PhoneNumberParam params) {
-        log.debug("Info of PhoneNumberParam:");
+    public ResponseEntity<ResultModel> authLogin(@RequestBody PhoneAuthLoginParam params) {
+        log.debug("Info of PhoneAuthLoginParam:");
         log.debug(ReflectionToStringBuilder.toString(params));
-        //重新封装参数，向认证平台请求校验token，获取手机号和省份等信息
-        PhoneNumberResponse result = checkToken(params);
-        return new ResponseEntity<PhoneNumberResponse>(result, HttpStatus.OK);
+
+        ResultModel result = checkToken(params);
+
+        return new ResponseEntity<ResultModel>(result, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/stb_auth_login", method = RequestMethod.POST, headers = {"content-type=application/json"})
@@ -129,8 +129,8 @@ public class UserSessionController {
         return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
     }
 
-    private PhoneNumberResponse checkToken(PhoneNumberParam params) {
-        String userID = params.getUserID();
+    private ResultModel checkToken(PhoneAuthLoginParam params) {
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String systemtime = sdf.format(new Date());
         Map<String, String> header = new HashMap<String, String>();
@@ -145,8 +145,6 @@ public class UserSessionController {
         body.put("token", params.getToken());
         requestParam.put("header", header);
         requestParam.put("body", body);
-        PhoneNumberResponse phoneNumberResponse = new PhoneNumberResponse();
-        PhoneNumberResponse.PhoneNumberResult phoneNumberResult = phoneNumberResponse.new PhoneNumberResult();
         try {
             String paramStr = JacksonUtil.beanToJson(requestParam);
             log.error("校验token请求信息：" + paramStr);
@@ -156,24 +154,30 @@ public class UserSessionController {
             String phoneNumber = checkTokenResult.getBody().getMsisdn();
             String province = checkTokenResult.getBody().getProvince();
             String errorCode = checkTokenResult.getHeader().getResultcode();
-            phoneNumberResult.setUserID(userID);
-            phoneNumberResponse.setErrorCode(errorCode);
-            phoneNumberResult.setMsisdn(phoneNumber);//可能为空
-            phoneNumberResult.setMsisdntype(checkTokenResult.getBody().getMsisdntype());
+            if (phoneNumber != null && !phoneNumber.equals("null")){//校验token成功
+                User localUser = userService.findUserByPhoneNumber(phoneNumber);
+                if (localUser == null) {//不存在,直接插入
+                    User resultUser = new User(phoneNumber,"phone",params.getClientID(),"0","");
+                    boolean isSuccess = userService.insertUser(resultUser);
+                    if(isSuccess){//插入新用户成功
+                        return ResultModel.ok();
+                    }else{//插入新用户失败
+                        return ResultModel.error(ResultStatus.USER_CREATE_FAILURE);
+                    }
+                }
+            }else{//校验token失败
+
+            }
             if (StringUtils.isEmpty(province) && !StringUtils.isEmpty(phoneNumber)) {
                 String xmlResult = httpRequest.doGet("http://life.tenpay.com/cgi-bin/mobile/MobileQueryAttribution.cgi?chgmobile=" + phoneNumber);
                 province = parseXmlResult(xmlResult);
             }
-            phoneNumberResult.setProvince(province);
-            userService.updatePhoneNumberAndProvince(userID, phoneNumber, province);
-        } catch (Exception e) {
+            //userService.updatePhoneNumberAndProvince(userID, phoneNumber, province);
+        } catch (Exception e) {//校验token失败
             log.error("获取手机号码异常:" + e.toString());
             e.printStackTrace();
         }
-        phoneNumberResponse.setStatus("success");
-        phoneNumberResponse.setErrorMsg("");
-        phoneNumberResponse.setResult(phoneNumberResult);
-        return phoneNumberResponse;
+        return ResultModel.ok();
     }
 
     private String parseXmlResult(String xmlResult) {
