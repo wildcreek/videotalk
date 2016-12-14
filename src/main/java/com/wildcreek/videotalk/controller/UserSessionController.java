@@ -162,48 +162,48 @@ public class UserSessionController {
             User localUser = userService.findUserByPhoneNumber(phoneNumber);
 
             if (localUser == null) {//不存在,直接插入
-                User resultUser = new User(phoneNumber,"phone",params.getClientID(),"0","");
+                User resultUser = new User(phoneNumber, "phone", params.getClientID(), "0", "");
                 userID = userService.insertUser(resultUser);
-                changeDevice ="false";
-                if(userID.equals("")){//插入新用户失败
+                changeDevice = "false";
+                if (userID.equals("")) {//插入新用户失败
                     return ResultModel.error(ResultStatus.USER_CREATE_FAILURE);
                 }
-            }else{//该用户已经存在
-                userID = localUser.getUserID()+"";
-                changeDevice = params.getClientID().equals(localUser.getClientID()) ? "false":"true";
+            } else {//该用户已经存在
+                userID = localUser.getUserID() + "";
+                changeDevice = params.getClientID().equals(localUser.getClientID()) ? "false" : "true";
             }
             if (StringUtils.isEmpty(province) && !StringUtils.isEmpty(phoneNumber)) {
-                String xmlResult = httpRequest.doGet("http://life.tenpay.com/cgi-bin/mobile/MobileQueryAttribution.cgi?chgmobile=" + phoneNumber);
-                province = parseXmlResult(xmlResult);
-                userService.updatePhoneNumberAndProvince(userID, phoneNumber, province);
+                try {
+                    province = queryProvinceByNumber(phoneNumber);
+                    userService.updatePhoneNumberAndProvince(userID, phoneNumber, province);
+                }catch (Exception e){
+                    log.error("查询号码归属地异常:" + e.toString());
+                }
             }
-
             response.put("userID", userID);
-            response.put("changeDevice",changeDevice);
+            response.put("changeDevice", changeDevice);
 
-            if (phoneNumber != null && !phoneNumber.equals("null")){//校验token成功
+            if (phoneNumber != null && !phoneNumber.equals("null")) {//校验token成功
                 return ResultModel.ok(response);
-            }else{//校验token失败
-                return new ResultModel(-1007,"认证token校验失败，errorCode："+ errorCode,response);
+            } else {//校验token失败
+                return new ResultModel(-1007, "认证token校验失败，errorCode：" + errorCode, response);
             }
 
         } catch (Exception e) {//请求校验token异常
             log.error("请求校验token异常:" + e.toString());
             e.printStackTrace();
+            return ResultModel.error(ResultStatus.AUTH_TOKEN_VERIFY_EXCEPTION);
         }
-        return ResultModel.ok();
     }
 
-    private String parseXmlResult(String xmlResult) {
+    private String queryProvinceByNumber(String number) throws Exception {
+        String xmlResult = null;
         String province = "";
-        try {
-            SAXReader reader = new SAXReader();
-            Document doc = reader.read(new ByteArrayInputStream(xmlResult.getBytes("GBK")));
-            Element root = doc.getRootElement();
-            province = root.element("province").getText();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        xmlResult = httpRequest.doGet("http://life.tenpay.com/cgi-bin/mobile/MobileQueryAttribution.cgi?chgmobile=" + number);
+        SAXReader reader = new SAXReader();
+        Document doc = reader.read(new ByteArrayInputStream(xmlResult.getBytes("GBK")));
+        Element root = doc.getRootElement();
+        province = root.element("province").getText();
         return province;
     }
 

@@ -11,7 +11,6 @@ public class PhoneAuthLoginParam {
     private String appid;
     private String token;
 
-
     public String getVersion() {
         return version;
     }
