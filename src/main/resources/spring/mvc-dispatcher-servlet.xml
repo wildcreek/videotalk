@@ -37,7 +37,7 @@
     <!--拦截器设置-->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/account/*"/>
+            <mvc:mapping path="/userinfo/*"/>
             <bean class="com.wildcreek.videotalk.authorization.interceptor.AuthorizationInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
