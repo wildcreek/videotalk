@@ -7,6 +7,7 @@ import com.wildcreek.videotalk.authorization.model.TokenModel;
 import com.wildcreek.videotalk.config.ResultStatus;
 import com.wildcreek.videotalk.model.ResultModel;
 import com.wildcreek.videotalk.model.User;
+import com.wildcreek.videotalk.model.request.ModifyPwdParam;
 import com.wildcreek.videotalk.model.request.PhoneAuthLoginParam;
 import com.wildcreek.videotalk.model.request.PhoneLoginParam;
 import com.wildcreek.videotalk.model.request.RegisterParam;
@@ -29,7 +30,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,7 +61,13 @@ public class UserAccountController {
                 User resultUser = new User(phoneNumber, "phone", clientId, "0", password);
                 String userID = userService.insertUser(resultUser);
                 if (!userID.equals("")) {//插入新用户成功
-                    return new ResponseEntity<ResultModel>(ResultModel.ok(), HttpStatus.OK);
+                    TokenModel model = tokenManager.createToken(Long.parseLong(userID));
+                    HashMap<String, String> response = new HashMap<String, String>();
+                    response.put("userID", userID);
+                    response.put("phoneNumber", phoneNumber);
+                    response.put("userToken", model.getToken());
+                    response.put("expireTime", "72");
+                    return new ResponseEntity<ResultModel>(ResultModel.ok(response), HttpStatus.OK);
                 } else {//插入新用户失败
                     return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USER_CREATE_FAILURE), HttpStatus.OK);
                 }
@@ -75,6 +81,30 @@ public class UserAccountController {
         return true;
     }
 
+    @RequestMapping(value = "/phone/modify_password", method = RequestMethod.POST)
+    public ResponseEntity<ResultModel> resetPassword(@RequestBody ModifyPwdParam params) {
+        String phoneNumber = params.getPhoneNumber();
+        String password = params.getPassword();
+        String smsCode = params.getSmsCode();
+        User resultUser;
+        String userID;
+        if(verifySmsCode(smsCode)){
+            resultUser = new User(phoneNumber, "phone", "", "0", password);
+            userID = userService.insertUser(resultUser);
+            //生成一个token，保存用户登录状态
+            TokenModel model = tokenManager.createToken(Long.parseLong(userID));
+            HashMap<String, String> response = new HashMap<String, String>();
+            response.put("userID", userID);
+            response.put("phoneNumber", phoneNumber);
+            response.put("userToken", model.getToken());
+            response.put("expireTime", "72");
+
+            return new ResponseEntity<ResultModel>(ResultModel.ok(response), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.SMSCODE_VERIFY_FAILURE), HttpStatus.OK);
+        }
+    }
+
     @RequestMapping(value = "/phone/login", method = RequestMethod.POST)
     public ResponseEntity<ResultModel> login(@RequestBody PhoneLoginParam params) {
         String userAccount = params.getUserAccount();
@@ -82,7 +112,7 @@ public class UserAccountController {
         User user = userService.findUserByUserAccount(userAccount);
         log.debug("UserSessionController" + ReflectionToStringBuilder.toString(user));
         if (user == null || !password.equals(user.getPassword())) {  //提示用户名或密码错误
-            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         //生成一个token，保存用户登录状态
         TokenModel model = tokenManager.createToken(user.getUserID());
@@ -104,7 +134,7 @@ public class UserAccountController {
         return new ResponseEntity<ResultModel>(result, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/stb/uth_login", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    @RequestMapping(value = "/stb/auth_login", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public ResponseEntity<LoginResponse> loginUser(@RequestBody User user) {
         log.debug("Info of loginParam(user):");
         log.debug(ReflectionToStringBuilder.toString(user));
@@ -208,8 +238,7 @@ public class UserAccountController {
             response.put("userID", userID);
             response.put("changeDevice", changeDevice);
 
-            if (phoneNumber != null && !phoneNumber.equals("null")) {//校验to891
-                // ken成功
+            if (phoneNumber != null && !phoneNumber.equals("null")) {//校验token成功
                 return ResultModel.ok(response);
             } else {//校验token失败
                 return new ResultModel(-1007, "认证token校验失败，errorCode：" + errorCode, response);
@@ -238,7 +267,6 @@ public class UserAccountController {
     public ResponseEntity<ResultModel> logout(@CurrentUser User user) {
         tokenManager.deleteToken(user.getUserID());
         return new ResponseEntity<ResultModel>(ResultModel.ok(), HttpStatus.OK);
-
     }
 
 }

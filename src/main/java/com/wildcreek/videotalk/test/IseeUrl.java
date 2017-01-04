@@ -11,7 +11,7 @@ public class IseeUrl {
     public static final String PHONE_LOGIN_URL         = HTTPS_HOST_PORT + "/account/phone/login";
     public static final String PHONE_AUTH_LOGIN_URL    = HTTPS_HOST_PORT + "/account/phone/auth_login";
     public static final String PHONE_REGISTER_URL      = HTTPS_HOST_PORT + "/account/phone/register";
-    public static final String PHONE_FORGET_PASS_URL   = HTTPS_HOST_PORT + "/account/phone/forget_password";
+    public static final String PHONE_FORGET_PASS_URL   = HTTPS_HOST_PORT + "/account/phone/modify_password";
     public static final String STB_AUTH_LOGIN_URL      = HTTPS_HOST_PORT + "/account/stb/auth_login";
     public static final String SEND_SMS_URL            = HTTPS_HOST_PORT + "/account/send_sms";
     public static final String LOGOUT_URL              = HTTPS_HOST_PORT + "/account/logout";
@@ -26,4 +26,10 @@ public class IseeUrl {
     public static final String UPDATE_USER_CONTACT_URL = HTTP_HOST_PORT + "/usercontact/update";
     public static final String DELETE_USER_CONTACT_URL = HTTP_HOST_PORT + "/usercontact/delete";
     public static final String FIND_ALL_CONTACT_URL    = HTTP_HOST_PORT + "/usercontact/find_all";
+
+    public static final String PHONE_UPDATE_INFO_URL   = HTTP_HOST_PORT + "/update/phone/info";
+    public static final String PHONE_DOWNLOAD_URL      = HTTP_HOST_PORT + "/update/phone/download";
+    public static final String STB_UPDATE_INFO_URL     = HTTP_HOST_PORT + "/update/phone/info";
+    public static final String STB_DOWNLOAD_URL        = HTTP_HOST_PORT + "/update/phone/download";
+
 }
