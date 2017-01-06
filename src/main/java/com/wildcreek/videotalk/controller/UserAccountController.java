@@ -110,7 +110,7 @@ public class UserAccountController {
         String userAccount = params.getUserAccount();
         String password = params.getPassword();
         User user = userService.findUserByUserAccount(userAccount);
-        log.debug("UserSessionController" + ReflectionToStringBuilder.toString(user));
+        log.debug("UserAccountController" + ReflectionToStringBuilder.toString(user));
         if (user == null || !password.equals(user.getPassword())) {  //提示用户名或密码错误
             return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
