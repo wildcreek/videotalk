@@ -41,3 +41,14 @@ CREATE TABLE `useraccount` (
   `province` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`userAccount`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `phonelocale`;
+CREATE TABLE `phonelocale` (
+  `prefix` int(10) NOT NULL,
+  `province` varchar(10) NOT NULL,
+  `city` varchar(10) NOT NULL,
+  `provider` varchar(10) NOT NULL,
+  `areacode` int(10) NOT NULL,
+  `postcode` int(10) NOT NULL,
+  PRIMARY KEY (`prefix`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
