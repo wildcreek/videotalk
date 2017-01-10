@@ -12,17 +12,18 @@ import java.util.Arrays;
  * Created by Administrator on 2017/1/10.
  */
 public class TestDbFileReader {
-    private static PhoneLocaleService phoneLocaleService;
+    private  PhoneLocaleService phoneLocaleService;
 
     @Autowired
     public void setPhoneLocaleService(PhoneLocaleService phoneLocaleService) {
         this.phoneLocaleService = phoneLocaleService;
     }
     public static void main(String[] args) {
-        readFromFile();
+        TestDbFileReader reader = new TestDbFileReader();
+        reader.readFromFile();
     }
 
-    public static void readFromFile() {
+    public  void readFromFile() {
         File file = new File("D:/IDEAWorkspace/videotalk/src/main/webapp/2016phonelocale.txt");
         if (!file.exists() || file.isDirectory()) {
             System.out.print("file not found");
