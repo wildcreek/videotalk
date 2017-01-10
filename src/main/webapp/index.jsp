@@ -1,15 +1,12 @@
 <html>
 <body>
-http://192.168.1.113:8080/account/login<br />
-http://192.168.1.113:8080/account/getNumber<br />
-http://192.168.1.113:8080/userlog/upload<br />
-http://192.168.1.113:8080/userinfo/nickname/find<br />
-http://192.168.1.113:8080/userinfo/nickname/update<br />
-http://192.168.1.113:8080/userinfo/avatar/find<br />
-http://192.168.1.113:8080/userinfo/avatar/update<br />
-http://192.168.1.113:8080/usercontact/create<br />
-http://192.168.1.113:8080/usercontact/update<br />
-http://192.168.1.113:8080/usercontact/delete<br />
-http://192.168.1.113:8080/usercontact/find_all<br />
+http://192.168.1.133:8080/videotalk/download/phone/Isee_phone_v1.0.11_2016-12-30_shandong_secure.apk<br/>
+http://192.168.1.133:8080/videotalk/download/stb/IseeProjectshandongnew1230_sign.apk<br/>
+http://192.168.1.133:8080/videotalk/download/wx_phone_download.jsp<br/>
+http://192.168.1.133:8080/videotalk/download/phone/wx_stb_download.jsp<br/>
+<a href="http://192.168.1.133:8080/videotalk/download/phone/Isee_phone_v1.0.11_2016-12-30_shandong_secure.apk">download phone apk</a><br/>
+<a href="http://192.168.1.133:8080/videotalk/download/stb/IseeProjectshandongnew1230_sign.apk">download stb apk</a><br/>
+<a href="http://192.168.1.133:8080/videotalk/download/wx_phone_download.jsp">weixin download phone apk page</a><br/>
+<a href="http://192.168.1.133:8080/videotalk/download/phone/wx_stb_download.jsp">weixin download stb apk page</a><br/>
 </body>
 </html>

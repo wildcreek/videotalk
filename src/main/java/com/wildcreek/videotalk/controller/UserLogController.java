@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 @Controller
 @RequestMapping("/userlog")
@@ -21,6 +23,7 @@ import java.io.File;
 public class UserLogController {
 
     private static Logger log = LoggerFactory.getLogger(UserLogController.class);
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private UserLogService userLogService;
 
     @Autowired
@@ -39,10 +42,17 @@ public class UserLogController {
             if (!mFile.isEmpty()) {
                 try {
                     String fileName = mFile.getOriginalFilename();
+                    if(fileName == null || "".equals(fileName)){
+                        fileName = mFile.getName();
+                    }
                     String path = request.getSession().getServletContext().getRealPath(File.separator + "resources" + File.separator + userID + File.separator + "logs");
                     File localFile = new File(path, fileName);
                     if (!localFile.exists()) {
                         localFile.mkdirs();
+                        localFile.createNewFile();
+                    }else {
+                        localFile.delete();
+                        localFile.createNewFile();
                     }
                     try {
                         mFile.transferTo(localFile);

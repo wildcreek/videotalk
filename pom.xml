@@ -192,5 +192,15 @@
             <artifactId>spring-data-redis</artifactId>
             <version>1.0.2.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>1.1</version>
+        </dependency>
     </dependencies>
 </project>
