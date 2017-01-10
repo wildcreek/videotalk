@@ -38,7 +38,7 @@ public class ClientUpdateController {
             HashMap<String, String> response = parseUpdateInfoFromConfig(inputStream);
             return new ResponseEntity<ResultModel>(ResultModel.ok(response), HttpStatus.OK);
         }catch(Exception e){
-            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.LOAD_UPDATE_CONFIGURE_FAILURE), HttpStatus.OK);
+            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.LOAD_CONFIGURATION_FAILURE), HttpStatus.OK);
         }
     }
     /**
@@ -51,7 +51,7 @@ public class ClientUpdateController {
             HashMap<String, String> response = parseUpdateInfoFromConfig(inputStream);
             return new ResponseEntity<ResultModel>(ResultModel.ok(response), HttpStatus.OK);
         }catch(Exception e){
-            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.LOAD_UPDATE_CONFIGURE_FAILURE), HttpStatus.OK);
+            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.LOAD_CONFIGURATION_FAILURE), HttpStatus.OK);
         }
     }
 

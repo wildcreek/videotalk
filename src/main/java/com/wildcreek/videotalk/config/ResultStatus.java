@@ -15,7 +15,7 @@ public enum ResultStatus {
     SMSCODE_VERIFY_FAILURE(-1006, "短信验证码校验失败"),
     AUTH_TOKEN_VERIFY_FAILURE(-1007, "auth_token校验失败"),
     AUTH_TOKEN_VERIFY_EXCEPTION(-1008, "auth_token校验请求异常"),
-    LOAD_UPDATE_CONFIGURE_FAILURE(-1009,"升级配置文件加载失败");
+    LOAD_CONFIGURATION_FAILURE(-1009,"配置文件加载失败");
 
     /**
      * 返回码
