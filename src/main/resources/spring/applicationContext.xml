@@ -56,6 +56,11 @@
     </bean>
     <context:component-scan base-package="com.wildcreek.videotalk.dao"/>
 
+    <!--phoneLocaleDao配置-->
+    <bean id="phoneLocaleDaoImpl" class="com.wildcreek.videotalk.dao.PhoneLocaleDaoImpl">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
     <!--配置redis相关参数-->
     <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
