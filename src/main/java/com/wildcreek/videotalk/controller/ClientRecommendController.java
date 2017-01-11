@@ -28,7 +28,7 @@ public class ClientRecommendController {
     /**
      * 推荐购买摄像头的文字描述信息
      */
-    @RequestMapping(value = "/buycamera", method = RequestMethod.GET)
+    @RequestMapping(value = "/buy_camera", method = RequestMethod.GET)
     public ResponseEntity<ResultModel> phoneUpdateInfo(){
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("client_recommend_info.properties");
         Properties p = new Properties();
@@ -47,7 +47,7 @@ public class ClientRecommendController {
     /**
      * 推荐下载手机端app的文字描述信息
      */
-    @RequestMapping(value = "/downloadphone", method = RequestMethod.GET)
+    @RequestMapping(value = "/download_phone", method = RequestMethod.GET)
     public ResponseEntity<ResultModel> stbUpdateInfo(){
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("client_recommend_info.properties");
         Properties p = new Properties();

@@ -32,7 +32,7 @@ public class QRCodeUtil {
     public static void main(String[] args) throws Exception {
         //String text = "http://218.206.176.238:8080/videotalk/downloadFile/ApkDownload";
         //String text="http://218.206.176.238:8080/videotalk/downloadFile/BoxApkDownload";
-        String text="http://139.129.233.168:9007/videotalk/downloadFile/ApkDownload";
+        String text="http://192.168.1.133:8080/videotalk/download/wx_phone_download.jsp";
         QRCodeUtil.encode(text, "", "d:/QRcodeAPK", true);
     }
     
