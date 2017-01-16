@@ -4,40 +4,40 @@ package com.wildcreek.videotalk.model.response;
  * Created by Administrator on 2016/6/6.
  */
 public class BaseResponse {
-    private String status;//success failure
-    private String errorCode;//错误码
-    private String errorMsg;//错误提示信息
+    private String code;//错误码
+    private String msg;// 错误信息
+    private Object data;// 数据
 
     public BaseResponse() {
     }
 
-    public BaseResponse(String status, String errorCode, String errorMsg) {
-        this.status = status;
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
+    public BaseResponse(String code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
 
-    public String getStatus() {
-        return status;
+    public String getCode() {
+        return code;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getErrorCode() {
-        return errorCode;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getErrorMsg() {
-        return errorMsg;
+    public Object getData() {
+        return data;
     }
 
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
+    public void setData(Object data) {
+        this.data = data;
     }
 }
