@@ -33,36 +33,34 @@ public class UserLogController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> uploadLog(@RequestParam("userID") String userID,
-            @RequestParam("file") CommonsMultipartFile[] files, HttpServletRequest request) throws Exception {
+                                                  @RequestParam("file") CommonsMultipartFile[] files, HttpServletRequest request) throws Exception {
         BaseResponse baseResponse;
         CommonsMultipartFile mFile;
-        log.error("上传文件个数:" + files.length);
+        log.error("上传文件userID" + userID + ",上传文件个数:" + files.length);
         for (int i = 0; i < files.length; i++) {
             mFile = files[i];
             if (!mFile.isEmpty()) {
+                String fileName = mFile.getOriginalFilename();
+                if (fileName == null || "".equals(fileName)) {
+                    fileName = mFile.getName();
+                }
+                log.error("上传文件userID" + userID + ",getOriginalFilename=" + mFile.getOriginalFilename() + ",getName =" + mFile.getName());
+                String path = request.getSession().getServletContext().getRealPath(File.separator + "resources" + File.separator + userID + File.separator + "logs");
+                File localFile = new File(path, fileName);
+                if (!localFile.exists()) {
+                    localFile.mkdirs();
+                    localFile.createNewFile();
+                } else {
+                    localFile.delete();
+                    localFile.createNewFile();
+                }
                 try {
-                    String fileName = mFile.getOriginalFilename();
-                    if(fileName == null || "".equals(fileName)){
-                        fileName = mFile.getName();
-                    }
-                    String path = request.getSession().getServletContext().getRealPath(File.separator + "resources" + File.separator + userID + File.separator + "logs");
-                    File localFile = new File(path, fileName);
-                    if (!localFile.exists()) {
-                        localFile.mkdirs();
-                        localFile.createNewFile();
-                    }else {
-                        localFile.delete();
-                        localFile.createNewFile();
-                    }
-                    try {
-                        mFile.transferTo(localFile);
-                        userLogService.saveLog(userID, localFile.getAbsolutePath().replace("\\", "\\\\"));
-                        log.error("上传成功，userID:" + userID + ",文件名:" + fileName);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    mFile.transferTo(localFile);
+                    userLogService.saveLog(userID, localFile.getAbsolutePath().replace("\\", "\\\\"));
+                    log.error("上传成功，userID:" + userID + ",文件名:" + fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    log.error("上传失败，userID:" + userID + ",文件名:" + fileName);
                 }
             }
         }

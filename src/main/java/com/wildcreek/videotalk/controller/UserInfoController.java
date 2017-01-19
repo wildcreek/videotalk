@@ -40,9 +40,8 @@ public class UserInfoController {
         //数据库查询
         String nickName = userInfoService.findNickNameByUserID(userID);
         findNickNameResult.setNickName(nickName);
-        findNickNameResponse.setStatus("success");
-        findNickNameResponse.setErrorCode("");
-        findNickNameResponse.setErrorMsg("");
+        findNickNameResponse.setCode("1000");
+        findNickNameResponse.setMsg("");
         findNickNameResponse.setResult(findNickNameResult);
         return new ResponseEntity<FindNickNameResponse>(findNickNameResponse, HttpStatus.OK);
     }

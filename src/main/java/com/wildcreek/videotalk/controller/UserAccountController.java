@@ -176,9 +176,7 @@ public class UserAccountController {
             loginResult.setChangeDevice("false");
 
         }
-        loginResponse.setStatus("success");
-        loginResponse.setErrorCode("");
-        loginResponse.setErrorMsg("");
+        loginResponse.setCode("1000");
         loginResponse.setResult(loginResult);
         return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
     }

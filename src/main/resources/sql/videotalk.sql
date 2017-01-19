@@ -23,7 +23,7 @@ CREATE TABLE `userinfo` (
 DROP TABLE IF EXISTS `userlog`;
 CREATE TABLE `userlog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userID` int(11) NOT NULL,
+  `userID` bigint(11) NOT NULL,
   `time` varchar(100) DEFAULT NULL,
   `userLog` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)

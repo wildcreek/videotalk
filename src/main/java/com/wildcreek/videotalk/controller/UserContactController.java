@@ -65,9 +65,8 @@ public class UserContactController {
         Contact resultContact = userContactService.createContact(contact);
 
         result.setContactId(resultContact.getContactId() + "");
-        response.setStatus("success");
-        response.setErrorCode("");
-        response.setErrorMsg("");
+        response.setCode("1000");
+        response.setMsg("");
         response.setResult(result);
         return new ResponseEntity<ContactResponse>(response, HttpStatus.OK);
     }
@@ -138,9 +137,8 @@ public class UserContactController {
             avatar =  "http://localhost:8080/resources/" + userID + "/avatars/" + contact.getContactAvatar();
             contact.setContactAvatar(avatar);
         }
-        response.setStatus("success");
-        response.setErrorCode("");
-        response.setErrorMsg("");
+        response.setCode("1000");
+        response.setMsg("");
         response.setResult(contacts);
         return new ResponseEntity<FindAllContactResponse>(response, HttpStatus.OK);
     }
