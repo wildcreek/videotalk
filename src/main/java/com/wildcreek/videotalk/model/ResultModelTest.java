@@ -7,7 +7,7 @@ import com.wildcreek.videotalk.config.ResultStatus;
  * @author XieEnlong
  * @date 2015/7/14.
  */
-public class ResultModel {
+public class ResultModelTest<T> {
 
     /**
      * 返回码
@@ -22,7 +22,7 @@ public class ResultModel {
     /**
      * 返回内容
      */
-    private Object content;
+    private T content;
 
     public int getCode() {
         return code;
@@ -36,40 +36,37 @@ public class ResultModel {
         return content;
     }
 
-    public ResultModel(int code, String message) {
+    public ResultModelTest(int code, String message) {
         this.code = code;
         this.message = message;
-        this.content = "";
     }
 
-    public ResultModel(int code, String message, Object content) {
+    public ResultModelTest(int code, String message, T content) {
         this.code = code;
         this.message = message;
         this.content = content;
     }
 
-    public ResultModel(ResultStatus status) {
+    public ResultModelTest(ResultStatus status) {
         this.code = status.getCode();
         this.message = status.getMessage();
-        this.content = "";
     }
 
-    public ResultModel(ResultStatus status, Object content) {
+    public ResultModelTest(ResultStatus status, Object content) {
         this.code = status.getCode();
         this.message = status.getMessage();
-        this.content = content;
     }
 
-    public static ResultModel ok(Object content) {
-        return new ResultModel(ResultStatus.SUCCESS, content);
+    public static ResultModelTest ok(Object content) {
+        return new ResultModelTest(ResultStatus.SUCCESS, content);
     }
 
-    public static ResultModel ok() {
-        return new ResultModel(ResultStatus.SUCCESS);
+    public static ResultModelTest ok() {
+        return new ResultModelTest(ResultStatus.SUCCESS);
     }
 
-    public static ResultModel error(ResultStatus error) {
-        return new ResultModel(error);
+    public static ResultModelTest error(ResultStatus error) {
+        return new ResultModelTest(error);
     }
 
     @Override

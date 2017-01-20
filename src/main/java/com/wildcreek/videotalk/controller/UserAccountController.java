@@ -30,6 +30,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,7 +136,7 @@ public class UserAccountController {
     }
 
     @RequestMapping(value = "/stb/auth_login", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody User user) {
+    public ResponseEntity<ResultModel> loginUser(@RequestBody User user) {
         log.debug("Info of loginParam(user):");
         log.debug(ReflectionToStringBuilder.toString(user));
 
@@ -151,17 +152,16 @@ public class UserAccountController {
         //在此进行业务操作，比如数据库持久化
         //接收到注册请求,查询数据库，如已经注册，返回相应参数；未注册，则插入数据库并返回相应参数。
         LoginResponse loginResponse = new LoginResponse();
-        LoginResponse.LoginResult loginResult = loginResponse.new LoginResult();
         User localUser = userService.findUserByUserAccount(userAccount);
         if (localUser != null) {//已经注册，返回相应参数,同时将用户信息插入数据库
             Long userID = localUser.getUserID();
             String localClientID = localUser.getClientID();
-            loginResult.setUserID(userID + "");
-            loginResult.setFirstLogin("false");
+            loginResponse.setUserID(userID + "");
+            //loginResponse.setFirstLogin("false");
             if (clientID.equals(localClientID)) {
-                loginResult.setChangeDevice("false");
+                loginResponse.setChangeDevice("false");
             } else {
-                loginResult.setChangeDevice("true");
+                loginResponse.setChangeDevice("true");
             }
             userService.updateClientID(userAccount, clientID);
         } else {//未注册
@@ -170,15 +170,13 @@ public class UserAccountController {
             // resultUser.setProvince(localUser.getProvince());
             String userID = userService.insertUser(resultUser);
             if (!userID.equals("")) {
-                loginResult.setUserID(userID);
+                loginResponse.setUserID(userID);
             }
-            loginResult.setFirstLogin("true");
-            loginResult.setChangeDevice("false");
+            //loginResponse.setFirstLogin("true");
+            loginResponse.setChangeDevice("false");
 
         }
-        loginResponse.setCode("1000");
-        loginResponse.setResult(loginResult);
-        return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
+        return new ResponseEntity<ResultModel>(ResultModel.ok(loginResponse), HttpStatus.OK);
     }
 
     private ResultModel checkToken(PhoneAuthLoginParam params) {
