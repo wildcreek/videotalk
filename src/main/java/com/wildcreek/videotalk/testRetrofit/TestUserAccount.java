@@ -1,12 +1,14 @@
 package com.wildcreek.videotalk.testRetrofit;
 
 import com.google.gson.Gson;
+import com.wildcreek.videotalk.model.ResultModel;
 import com.wildcreek.videotalk.model.response.LoginResponse;
-import com.wildcreek.videotalk.model.ResultModelTest;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -26,7 +28,7 @@ public class TestUserAccount {
             .baseUrl(BASE_URL)
             .client(HttpsUtils.getOkHttpsClient())
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            //.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build();
     static UserApi userApi = retrofit.create(UserApi.class);
     public static void main(String args[]) {
@@ -36,27 +38,28 @@ public class TestUserAccount {
     public interface UserApi{
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/register")
-        Observable<ResultModelTest<LoginResponse>> register(@Body RequestBody body);
+        //Observable<ResultModel<LoginResponse>> register(@Body RequestBody body);
+        Call<ResultModel<LoginResponse>> register(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/login")
-        Observable<ResultModelTest<LoginResponse>> login(@Body RequestBody body);
+        Call<ResultModel<LoginResponse>> login(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/auth_login")
-        Observable<ResultModelTest<LoginResponse>> authLogin(@Body RequestBody body);
+        Call<ResultModel<LoginResponse>> authLogin(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/stb/auth_login")
-        Observable<ResultModelTest<LoginResponse>> stbAuthLogin(@Body RequestBody body);
+        Call<ResultModel<LoginResponse>> stbAuthLogin(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/modify_password")
-        Observable<ResultModelTest<LoginResponse>> modifyPwd(@Body RequestBody body);
+        Call<ResultModel<LoginResponse>> modifyPwd(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/logout")
-        Observable<ResultModelTest<LoginResponse>> logout(@Body RequestBody body);
+        Call<ResultModel<LoginResponse>> logout(@Body RequestBody body);
 
     }
     public static <T> void setSubscribe(Observable<T> observable, Observer<T> observer) {
@@ -73,24 +76,17 @@ public class TestUserAccount {
         params.put("userAccount",username);
         params.put("password",password);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),new Gson().toJson(params));
-        userApi.login(body)
-                .subscribeOn(Schedulers.immediate())
-                .subscribe(new Observer<ResultModelTest<LoginResponse>>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("登录返回onCompleted：");
-                    }
+        userApi.login(body).enqueue(new Callback<ResultModel<LoginResponse>>() {
+            @Override
+            public void onResponse(Call<ResultModel<LoginResponse>> call, Response<ResultModel<LoginResponse>> response) {
+                System.out.println("登录返回结果：" + response.body().toString());
+            }
 
-                    @Override
-                    public void onError(Throwable throwable) {
-                        System.out.println("登录返回失败：" + throwable.toString());
-                    }
-
-                    @Override
-                    public void onNext(ResultModelTest<LoginResponse> response) {
-                        System.out.println("登录返回结果：" + response );
-                    }
-                });
+            @Override
+            public void onFailure(Call<ResultModel<LoginResponse>> call, Throwable throwable) {
+                System.out.println("登录返回失败：" + throwable.toString());
+            }
+        });
     }
 
 }
