@@ -2,7 +2,6 @@ package com.wildcreek.videotalk.testRetrofit;
 
 import com.google.gson.Gson;
 import com.wildcreek.videotalk.model.ResultModel;
-import com.wildcreek.videotalk.model.response.LoginResponse;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -17,6 +16,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.schedulers.Schedulers;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -39,27 +39,27 @@ public class TestUserAccount {
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/register")
         //Observable<ResultModel<LoginResponse>> register(@Body RequestBody body);
-        Call<ResultModel<LoginResponse>> register(@Body RequestBody body);
+        Call<ResultModel> register(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/login")
-        Call<ResultModel<LoginResponse>> login(@Body RequestBody body);
+        Call<ResultModel> login(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/auth_login")
-        Call<ResultModel<LoginResponse>> authLogin(@Body RequestBody body);
+        Call<ResultModel> authLogin(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/stb/auth_login")
-        Call<ResultModel<LoginResponse>> stbAuthLogin(@Body RequestBody body);
+        Call<ResultModel> stbAuthLogin(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/phone/modify_password")
-        Call<ResultModel<LoginResponse>> modifyPwd(@Body RequestBody body);
+        Call<ResultModel> modifyPwd(@Body RequestBody body);
 
         @Headers({"Content-Type: application/json","Accept: application/json"})
         @POST("account/logout")
-        Call<ResultModel<LoginResponse>> logout(@Body RequestBody body);
+        Call<ResultModel> logout(@Body RequestBody body);
 
     }
     public static <T> void setSubscribe(Observable<T> observable, Observer<T> observer) {
@@ -76,14 +76,23 @@ public class TestUserAccount {
         params.put("userAccount",username);
         params.put("password",password);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),new Gson().toJson(params));
-        userApi.login(body).enqueue(new Callback<ResultModel<LoginResponse>>() {
+        userApi.login(body).enqueue(new Callback<ResultModel>() {
             @Override
-            public void onResponse(Call<ResultModel<LoginResponse>> call, Response<ResultModel<LoginResponse>> response) {
-                System.out.println("登录返回结果：" + response.body().toString());
+            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+
+                if(response.isSuccessful()){
+                    System.out.println("登录返回成功：" + response.body().toString());
+                }else{
+                    try {
+                        System.out.println("登录返回失败：" + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
-            public void onFailure(Call<ResultModel<LoginResponse>> call, Throwable throwable) {
+            public void onFailure(Call<ResultModel> call, Throwable throwable) {
                 System.out.println("登录返回失败：" + throwable.toString());
             }
         });

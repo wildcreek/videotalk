@@ -55,6 +55,7 @@ public class ResultModel<T> {
     public ResultModel(ResultStatus status, T content) {
         this.code = status.getCode();
         this.message = status.getMessage();
+        this.content = content;
     }
 
     public static ResultModel ok(Object content) {
@@ -67,6 +68,9 @@ public class ResultModel<T> {
 
     public static ResultModel error(ResultStatus error) {
         return new ResultModel(error);
+    }
+    public static ResultModel error(ResultStatus error ,Object content) {
+        return new ResultModel(error ,content);
     }
 
     @Override
